@@ -1,0 +1,31 @@
+{
+  "name": "@dandy-doc/core",
+  "version": "1.0.0",
+  "description": "Markdown visualiser",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha --reporter nyan" 
+  },
+  "engines": {
+    "node": ">=15.0.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jocelynmutso/dandy-doc.git"
+  },
+  "keywords": [
+    "markdown",
+    "documentation",
+    "visualiser"
+  ],
+  "author": "Jocelyn Mutso <“jocelyn.mutso@gmail.com”> (https://github.com/jocelynmutso/dandy-doc)",
+  "license": "Apache 2.0",
+  "bugs": {
+    "url": "https://github.com/jocelynmutso/dandy-doc/issues"
+  },
+  "homepage": "https://github.com/jocelynmutso/dandy-doc#readme",
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "mocha": "^8.2.1"
+  }
+}
