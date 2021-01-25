@@ -1,3 +1,6 @@
-const Dandy = {v: "test 1"}
+import Dandy from './Dandy';
 
-export {Dandy};
+
+
+
+export default Dandy;

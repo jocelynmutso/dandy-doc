@@ -1,10 +1,19 @@
 import React from 'react';
-
-import { Paper } from '@material-ui/core';
+import Dandy from '../src'
+import DefaultTheme from '../src/DefaultTheme';
 
 
 export default { title: 'Demo stories' };
 
+const files = [
+  {name: 'myName', url: 'path/pathname'}, 
+  {name: 'Blob', url: 'path/cat'},
+  {name: 'Tony', url: 'path/person'}
+];
+
 export const hello = () => (<>
-  <Paper> hello demo </Paper>
+  <Dandy theme = {DefaultTheme} files = {files} />
 </>);
+
+
+
