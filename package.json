@@ -2,15 +2,15 @@
   "name": "@jocelynmutso/dandy-doc",
   "version": "1.0.4",
   "description": "Markdown visualiser",
-  "main": "lib/index.js",
-  "types": "lib/index.d.ts",
+  "main": "build/index.js",
+  "types": "build/index.d.ts",
   "files": [
-    "lib"
+    "build"
   ],
   "scripts": {
     "test": "mocha --reporter nyan",
-    "build": "rm -rf ./lib && tsc",
-    "clean": "rm -rf ./lib",
+    "build": "rm -rf ./build && tsc",
+    "clean": "rm -rf ./build",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook"
   },

@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "lib": ["es6", "dom"],
-    "outDir": "lib",
+    "outDir": "build",
     "target": "es5",
     "module": "commonjs",
     "moduleResolution": "node",
@@ -34,7 +34,7 @@
   ],
   "exclude": [
     "node_modules",
-    "lib",
+    "build",
     "src/setupTests.ts",
     "**/*.test.tsx",
     "**/*.test.ts"
