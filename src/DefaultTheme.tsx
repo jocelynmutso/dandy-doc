@@ -63,8 +63,8 @@ const palette: PaletteOptions = {
     main: '#ff8600',
   },
   text: {
-    primary: 'rgba(9,9,59,0.87)',
-    secondary: 'rgba(44,75,148,0.75)',
+    primary: 'rgba(9,9,59,0.87)',  //#09093B dark blue
+    secondary: 'rgba(44,75,148,0.75)',  //#2C4B94 blue
   },
 }
 
@@ -78,7 +78,7 @@ const PrimaryTheme = createMuiTheme({
   overrides: {
     MuiToolbar: {
       root: {
-        backgroundColor: "blue"
+        backgroundColor: '#f0eff4'
       }
     }
   }
@@ -102,7 +102,7 @@ const SecondaryTheme = createMuiTheme({
 
     MuiPaper: {
       root: {
-        backgroundColor: 'darkred', // #4d2f75 dialob purple
+        backgroundColor: '#0a1128', 
       }
     },
 

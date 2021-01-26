@@ -41,9 +41,9 @@ const useStyles = (drawerWidth: number) => makeStyles((theme: Theme) =>
     search: {
       position: 'relative',
       borderRadius: theme.shape.borderRadius,
-      backgroundColor: fade(theme.palette.common.white, 0.15),
+      backgroundColor: fade(theme.palette.primary.main, 0.20),
       '&:hover': {
-        backgroundColor: fade(theme.palette.common.white, 0.25),
+        backgroundColor: fade(theme.palette.primary.main, 0.10),
       },
       marginLeft: 0,
       width: '100%',
@@ -75,6 +75,7 @@ const useStyles = (drawerWidth: number) => makeStyles((theme: Theme) =>
         '&:focus': {
           width: '20ch',
         },
+        color: theme.palette.primary.main,
       },
     },
     appBar: {
@@ -118,7 +119,8 @@ const LayoutTop: React.FC<LayoutTopProps> = ({drawer}) => {
           <MenuIcon color="primary"/>
         </IconButton>
   
-        <Typography variant="body1" noWrap className={classes.iconLink} style={{ flex: 1 }} >
+        <Typography variant="h3" noWrap className={classes.iconLink} style={{ flex: 1 }} >
+        Hello, Dandy
         </Typography>
   
         <div className={classes.search}>
