@@ -26,8 +26,8 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-interface MenuLevel1Props {
-  children: React.ReactNode;
+interface MenuLevel1Props { 
+  children?: React.ReactNode | React.ReactNode[];
   open: boolean,
   name: string
 }

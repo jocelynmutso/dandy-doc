@@ -41,7 +41,7 @@ interface LayoutLeftProps {
     width: number,
     open: boolean
   },
-  children:  React.ReactElement[]
+  children:  React.ReactNode | React.ReactNode[]
   
 }
 

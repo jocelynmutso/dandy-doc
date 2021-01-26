@@ -22,17 +22,17 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 interface MenuLevel2Props {
-  name: string;
+  children: string;
 }
 
-const MenuLevel2: React.FC<MenuLevel2Props> = ({name}) => {
+const MenuLevel2: React.FC<MenuLevel2Props> = ({children}) => {
   const classes = useStyles();
 
-  return (
+  return ( 
     <ListItem button className={classes.nested}>
 
      <ListItemText> 
-          <span className={classes.secondaryText}>{name}</span>
+          <span className={classes.secondaryText}>{children}</span>
       </ListItemText>
     </ListItem>);
 }

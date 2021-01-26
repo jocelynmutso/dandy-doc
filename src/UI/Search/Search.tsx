@@ -58,15 +58,21 @@ interface SearchProps {
 const Search: React.FC<SearchProps> = ({}) => {
   const classes = useStyles();
   
+  const className = {
+    root: classes.inputRoot,
+    input: classes.inputInput
+  };
+
+  const inputProps = {
+    'aria-label': 'search' 
+  }
+
   return (<div className={classes.search}>
     <div className={classes.searchIcon}><SearchIcon color="primary" /></div>
     <InputBase
       placeholder="Search…"
-      classes={{
-        root: classes.inputRoot,
-        input: classes.inputInput,
-      }}
-      inputProps={{ 'aria-label': 'search' }} />
+      classes={className}
+      inputProps={inputProps} />
   </div>);
 }
 

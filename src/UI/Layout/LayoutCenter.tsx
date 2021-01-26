@@ -51,7 +51,6 @@ interface LayoutCenterProps {
 }
 
 
-
 const LayoutCenter: React.FC<LayoutCenterProps> = ({appBar, menus, children}) => {
   const classes = useStyles(menus.width);
   

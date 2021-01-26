@@ -4,7 +4,7 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 
 
 
-const useStyles = () => makeStyles((theme: Theme) =>
+const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       display: 'flex',
@@ -36,8 +36,8 @@ const useStyles = () => makeStyles((theme: Theme) =>
       }),
       marginLeft: 0,
     },
-  }),
-)();
+  })
+);
 
 
 interface LayoutProps {
