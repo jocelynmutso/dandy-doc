@@ -11,8 +11,10 @@ const files = [
   {name: 'Tony', url: 'path/person'}
 ];
 
+const brand = {title: "My Doc"}
+
 export const hello = () => (<>
-  <Dandy theme = {DefaultTheme} files = {files} />
+  <Dandy theme = {DefaultTheme} files = {files} brand={brand}/>
 </>);
 
 
