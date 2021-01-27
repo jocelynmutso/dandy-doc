@@ -52,7 +52,7 @@ declare namespace DomainModel {
   
   interface Navigation {
     location: Location,
-    setLocation: (newLocation: Location) => void
+    setLocation: (newLocation: Location) => Navigation
   }
   
 }

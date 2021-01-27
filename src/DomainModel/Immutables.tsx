@@ -161,12 +161,45 @@ class ImmutableMd implements DomainModel.Md {
   }
 }
 
-class immutableLocation implements DomainModel.Location {
+class ImmutableLocation implements DomainModel.Location {
+  private _topic?: DomainModel.Topic;
+  private _subTopic?: DomainModel.SubTopic;
+  private _anchor?: string;
+  
+  constructor (topic: DomainModel.Topic, subTopic: DomainModel.SubTopic, anchor: string) {
+    this._topic = topic;
+    this._subTopic = subTopic;
+    this._anchor = anchor;
+  }
+  
+  get topic(): DomainModel.Topic | undefined {
+    return this._topic;
+  }
+  
+  get subTopic(): DomainModel.SubTopic | undefined {
+    return this._subTopic;
+  }
+  
+  get anchor(): string | undefined {
+    return this._anchor;
+  }
+}
+
+class ImmutableNavigation implements DomainModel.Navigation {
+   private _location: DomainModel.Location;
+   
+   constructor(location: DomainModel.Location) {
+    this._location = location;
+  }
+  
+  get location(): DomainModel.Location {
+    return this._location;
+  }
+  
+  setLocation(newLocation: DomainModel.Location): DomainModel.Navigation {
+    return new ImmutableNavigation(newLocation);
+  }
   
 }
 
-class immutableNavigation implements DomainModel.Navigation {
-  
-}
-
-export { ImmutableSubTopic, ImmutableTopic, ImmutableSite, ImmutableMd };
+export { ImmutableSubTopic, ImmutableTopic, ImmutableSite, ImmutableMd, ImmutableLocation, ImmutableNavigation };
