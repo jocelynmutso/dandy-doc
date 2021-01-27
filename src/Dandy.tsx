@@ -2,8 +2,9 @@
 import React from 'react';
 import { Theme, ThemeProvider } from '@material-ui/core/styles';
 
-import { Layout, LayoutTop, LayoutLeft } from './UI/Layout';
+import { DomainModel } from './DomainModel'
 
+import { Layout, LayoutTop, LayoutLeft } from './UI/Layout';
 import Brand from './UI/Brand';
 import Search from './UI/Search';
 import { MenuLevel1, MenuLevel2 } from './UI/Menu';
@@ -17,33 +18,33 @@ interface DandyProps { //config object, keep everything here
     primary: Theme,
     secondary: Theme
   },
-  
-  files: {  //markdown files to be displaoyed
-    name: string,
-    url: string
-  }[],
+  site: DomainModel.Site
 }
 
-const Dandy: React.FC<DandyProps> = ({theme, brand, files}) => {
-  console.log(files, theme);
+const Dandy: React.FC<DandyProps> = ({theme, brand, site}) => {
+  console.log(site, theme);
   
   const drawer = { 
     width: 260,
     open: true 
   };
   
+
+  const createMenuLevel2 = (item: DomainModel.SubTopic, index: number) => {
+    return (<MenuLevel2 key={index}>{item.name}</MenuLevel2>);
+  }
   
-  const createMenuLevel1 = (item: { name: string, url: string}) => {
+  const createMenuLevel1 = (item: DomainModel.Topic, index: number) => {
+    const children = item.subTopics.map(createMenuLevel2);
     return (
-      <MenuLevel1 name={item.name} open={true}>
-        <MenuLevel2>menu level 2</MenuLevel2>
-        <MenuLevel2>menu level 2</MenuLevel2>
+      <MenuLevel1 key={index} name={item.name} open={true}>
+        {children}
       </MenuLevel1>
     );
   }
   
   
-  const menus = files.map(createMenuLevel1);
+  const menus = site.topics.map(createMenuLevel1);
  
   const left = (<ThemeProvider theme={(outer) => ({...outer, ...theme.secondary})}>
     <LayoutLeft drawer={drawer}>

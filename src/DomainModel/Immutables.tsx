@@ -161,4 +161,12 @@ class ImmutableMd implements DomainModel.Md {
   }
 }
 
-export { ImmutableSubTopic, ImmutableTopic, ImmutableSite };
+class immutableLocation implements DomainModel.Location {
+  
+}
+
+class immutableNavigation implements DomainModel.Navigation {
+  
+}
+
+export { ImmutableSubTopic, ImmutableTopic, ImmutableSite, ImmutableMd };

@@ -35,5 +35,25 @@ declare namespace DomainModel {
     anchors: string[], 
     src: string
   }
+  
+  
+  interface MdFiles {
+    files: {  //markdown files to be displaoyed
+      name: string,
+      url: string
+    }[],
+  }
+  
+  interface Location {
+    topic?: Topic,
+    subTopic?: SubTopic,
+    anchor?: string,
+  }
+  
+  interface Navigation {
+    location: Location,
+    setLocation: (newLocation: Location) => void
+  }
+  
 }
 export type { DomainModel };
