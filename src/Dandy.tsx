@@ -2,8 +2,10 @@
 import React from 'react';
 import { Theme } from '@material-ui/core/styles';
 
-import { DomainModel } from './DomainModel'
+import { Router, Route } from "react-router-dom";
+import { createHashHistory, History } from 'history';
 
+import { DomainModel } from './DomainModel'
 import UIApp from './UI/UIApp';
 import { UIContextProvider }  from './UI/Context/Context';
 
@@ -16,15 +18,21 @@ interface DandyProps { //config object, keep everything here
     primary: Theme,
     secondary?: Theme
   },
-  site: DomainModel.Site
+  md: DomainModel.MdFiles
 }
 
-const Dandy: React.FC<DandyProps> = ({theme, brand, site}) => {
+const history: History = createHashHistory();
+
+const Dandy: React.FC<DandyProps> = ({theme, brand, md}) => {
  
   return (
-  <UIContextProvider site={site}>
-    <UIApp brand={brand} theme={theme} />
-  </UIContextProvider>
+  <Router history={history}>
+    <Route path="/:topic?/:subTopic?/:anchor?" render={(props) => (
+      <UIContextProvider md={md} route={props.match.params} history={history}>
+        <UIApp brand={brand} theme={theme} />
+      </UIContextProvider>
+    )} />
+  </Router> 
   );
 }
 

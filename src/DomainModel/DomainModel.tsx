@@ -3,6 +3,7 @@ declare namespace DomainModel {
   interface Site {
     topics: Topic[],
     getTopic(id: string): Topic;
+    findTopic(id: string): Topic | undefined;
     getSubTopic(id: string): SubTopic;
     findSubTopic(id?: string): SubTopic | undefined;
     withMd(newMarkdown: MdMutator) : Site;

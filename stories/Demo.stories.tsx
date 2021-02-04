@@ -1,10 +1,8 @@
 import React from 'react';
 import Dandy from '../src'
-import { ServiceImpl, DomainModel } from '../src/DomainModel'
+import { DomainModel } from '../src/DomainModel'
 
 import DefaultTheme from '../src/DefaultTheme';
-
-
 export default { title: 'Demo stories' };
 
 
@@ -28,13 +26,10 @@ const mdFiles: DomainModel.MdFiles = {
   })
 };
 
-
-const site: DomainModel.Site = new ServiceImpl().createSite(mdFiles);
-console.log(site)
 const brand = {title: "My Doc"}
 
 export const hello = () => (<>
-  <Dandy theme={DefaultTheme} site={site} brand={brand}/>
+  <Dandy theme={DefaultTheme} md={mdFiles} brand={brand}/>
 </>);
 
 

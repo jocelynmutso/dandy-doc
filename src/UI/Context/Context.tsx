@@ -1,4 +1,6 @@
 import React from 'react';
+import { History } from 'history';
+
 import { DomainModel, ImmutableNavigation, Service, ServiceImpl } from '../../DomainModel';
 import { navReducer } from './navReducer';
 import { siteReducer } from './siteReducer';
@@ -13,16 +15,27 @@ interface UIContextType {//declare what is in the context
 }
 
 
+interface RouteInitProps {
+  topic?: string;
+  subTopic?: string;
+  anchor?: string
+}
+
 interface UIContextProviderProps {
-  site: DomainModel.Site;
+  route: RouteInitProps,
+  history: History;
+  md: DomainModel.MdFiles;
   children: React.ReactNode;
 }
 
 const UIContextProvider: React.FC<UIContextProviderProps> = (props) => {
- 
-   // link reducer to react hook with initial state
+  const [site, siteDispatch] = React.useReducer(siteReducer, service.createSite(props.md)); 
+   
+  //link reducer to react hook with initial state
+  //const initNav = React.useMemo(() => service.createNav(site, props.route), [props.route]);
+  const initNav = service.createNav(site, props.route);
   const [nav, navDispatch] = React.useReducer(navReducer, initNav);
-  const [site, siteDispatch] = React.useReducer(siteReducer, props.site); 
+
  
   //overwrite initial values anyway
   const contextValue: UIContextType = { 
@@ -42,11 +55,18 @@ const UIContextProvider: React.FC<UIContextProviderProps> = (props) => {
     }
   };
   
+  React.useEffect(() => {
+    const route = service.createRoute(nav);
+    if(route) {
+      props.history.push(route); 
+    }
+  }, [service, nav])
+  
   //initialise provider
   return (<UIContext.Provider value={contextValue}>
       {props.children}
     </UIContext.Provider>);
- }
+}
  
 const service: Service = new ServiceImpl();
 const initNav: DomainModel.Navigation = new ImmutableNavigation();

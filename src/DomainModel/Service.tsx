@@ -1,7 +1,9 @@
 import { DomainModel } from './DomainModel';
-import { ImmutableSubTopic, ImmutableMd, ImmutableTopic, ImmutableSite } from './Immutables';
+import { ImmutableSubTopic, ImmutableMd, ImmutableTopic, ImmutableSite, ImmutableNavigation } from './Immutables';
 
 interface Service {
+  createRoute(location: DomainModel.Navigation): string | undefined;
+  createNav(site:DomainModel.Site, route: {topic?:string, subTopic?: string, anchor?: string}): DomainModel.Navigation;
   fetch(subTopic: DomainModel.SubTopic): Promise<DomainModel.MdMutator>
   createSite(files: DomainModel.MdFiles): DomainModel.Site;
 }
@@ -21,6 +23,48 @@ class ServiceImpl implements Service {
       return `# Can't fetch sub topic:'${url}'`;
     })
     .then(src => ({url, anchors: [], src}));
+  }
+  
+  createRoute(nav: DomainModel.Navigation): string | undefined {
+    let newHistory: string | undefined;
+    
+    if(nav.current.subTopic) {
+      newHistory = nav.current.subTopic.value.id;
+      if(nav.current.subTopic.anchor) {
+        newHistory += "/" + nav.current.subTopic.anchor;
+      }
+    } else if(nav.current.topic) {
+      newHistory = nav.current.topic.id;
+    }
+    
+    
+    if(newHistory) {
+      return "/" + newHistory;  
+    }
+    return undefined;
+  }
+  
+  createNav(site: DomainModel.Site, route: {topic?: string, subTopic?: string, anchor?: string}): DomainModel.Navigation {
+    let subTopicId: string | undefined;
+    if(route.subTopic) {
+      subTopicId = (route.topic? route.topic: "") + "/" + route.subTopic;
+    }
+    
+    const subTopic : DomainModel.SubTopic | undefined = site.findSubTopic(subTopicId);
+    if(!subTopic && subTopicId) {
+      console.error("No sub topic by id: " + subTopicId);
+    } else if(subTopic) {
+      const location = {
+        topic: site.getTopic(subTopic.topicId), 
+        subTopic: { value: subTopic, anchor: route.anchor }
+      };
+      return new ImmutableNavigation(location)
+    } else if(route.topic) {
+      const topic : DomainModel.Topic | undefined = site.findTopic(route.topic);
+      return new ImmutableNavigation({ topic })
+    }
+    
+    return new ImmutableNavigation()
   }
   
   createSite(mdFiles: DomainModel.MdFiles) {

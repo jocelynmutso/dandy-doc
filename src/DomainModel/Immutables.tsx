@@ -17,11 +17,18 @@ class ImmutableSite implements DomainModel.Site {
     return this._subTopics;
   }
   getTopic(id: string): DomainModel.Topic {
+    const result = this.findTopic(id);
+    if(result) {
+      return result;  
+    }
+    throw new Error(`Can't get page with id: ${id}'!`);
+  }
+  findTopic(id: string): DomainModel.Topic | undefined {
     const result = this._topics.filter(p => p.id === id);
     if(result.length === 1) {
       return result[0];  
     }
-    throw new Error(`Can't get page with id: ${id}'!`);
+    return undefined
   }
   getSubTopic(id: string): DomainModel.SubTopic {
     const result = this.findSubTopic(id);
