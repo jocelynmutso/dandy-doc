@@ -14,7 +14,7 @@ interface DandyProps { //config object, keep everything here
   brand: { title: string },
   theme: {
     primary: Theme,
-    secondary: Theme
+    secondary?: Theme
   },
   site: DomainModel.Site
 }

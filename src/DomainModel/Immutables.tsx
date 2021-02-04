@@ -128,7 +128,7 @@ class ImmutableSubTopic implements DomainModel.SubTopic {
     return this._md
   }
   withMd(markdown: DomainModel.MdMutator): DomainModel.SubTopic {
-    const md: DomainModel.Md = new ImmutableMd(markdown.url, true, markdown.anchors, markdown.src);
+    const md: DomainModel.Md = new ImmutableMd(markdown.url, true, markdown.src, markdown.anchors);
     return new ImmutableSubTopic(this._id, this._topicId, this._name, md);
   }
 }
@@ -139,7 +139,7 @@ class ImmutableMd implements DomainModel.Md {
   private _anchors: string[];
   private _src?: string;
   
-  constructor(url: string, loaded?: boolean, anchors?: string[], src?: string) {
+  constructor(url: string, loaded?: boolean, src?: string, anchors?: string[]) {
     this._url = url;
     this._loaded = loaded ? true : false;
     this._anchors = anchors ? anchors : [];
@@ -163,43 +163,61 @@ class ImmutableMd implements DomainModel.Md {
 
 class ImmutableLocation implements DomainModel.Location {
   private _topic?: DomainModel.Topic;
-  private _subTopic?: DomainModel.SubTopic;
-  private _anchor?: string;
+  private _subTopic?: { value: DomainModel.SubTopic, anchor?: string };
   
-  constructor (topic: DomainModel.Topic, subTopic: DomainModel.SubTopic, anchor: string) {
+  constructor (topic?: DomainModel.Topic, subTopic?: { value: DomainModel.SubTopic, anchor?: string }) {
+    if(subTopic && !topic) {
+      throw new Error("topic is not defined for subTopic: " + subTopic);
+    }
     this._topic = topic;
     this._subTopic = subTopic;
-    this._anchor = anchor;
   }
   
   get topic(): DomainModel.Topic | undefined {
     return this._topic;
   }
   
-  get subTopic(): DomainModel.SubTopic | undefined {
+  get subTopic(): { value: DomainModel.SubTopic, anchor?: string } | undefined {
     return this._subTopic;
   }
-  
-  get anchor(): string | undefined {
-    return this._anchor;
+}
+
+class ImmutableNavigationHistory implements DomainModel.NavigationHistory {
+  private _value: DomainModel.Location;
+  private _previous?: DomainModel.NavigationHistory;
+   
+  constructor(value: DomainModel.Location, previous?: DomainModel.NavigationHistory) {
+    this._value = value;
+    this._previous = previous;
+  }
+  get value(): DomainModel.Location {
+    return this._value;
+  }
+  get previous(): DomainModel.NavigationHistory | undefined {
+    return this._previous;
   }
 }
 
 class ImmutableNavigation implements DomainModel.Navigation {
-   private _location: DomainModel.Location;
+  private _current: DomainModel.Location;
+  private _history: DomainModel.NavigationHistory;
    
-   constructor(location: DomainModel.Location) {
-    this._location = location;
+  constructor(current?: DomainModel.Location, history?: DomainModel.NavigationHistory) {
+    this._current = current ? current : new ImmutableLocation();
+    this._history = history ? history : new ImmutableNavigationHistory(this._current);
   }
-  
-  get location(): DomainModel.Location {
-    return this._location;
+  get current(): DomainModel.Location {
+    return this._current;
   }
-  
-  setLocation(newLocation: DomainModel.Location): DomainModel.Navigation {
-    return new ImmutableNavigation(newLocation);
+  get history(): DomainModel.NavigationHistory {
+    return this._history;
   }
-  
+  addLocation(newLocation: DomainModel.Location): DomainModel.Navigation {
+    
+    return new ImmutableNavigation(
+      new ImmutableLocation(newLocation.topic, newLocation.subTopic), 
+      new ImmutableNavigationHistory(this._current, this._history));
+  }
 }
 
 export { ImmutableSubTopic, ImmutableTopic, ImmutableSite, ImmutableMd, ImmutableLocation, ImmutableNavigation };

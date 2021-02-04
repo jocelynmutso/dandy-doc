@@ -40,20 +40,25 @@ declare namespace DomainModel {
   interface MdFiles {
     files: {  //markdown files to be displaoyed
       name: string,
-      url: string
+      url: string,
+      content?: string
     }[],
   }
   
   interface Location {
     topic?: Topic,
-    subTopic?: SubTopic,
-    anchor?: string,
+    subTopic?: { value: SubTopic, anchor?: string }
   }
   
   interface Navigation {
-    location: Location,
-    setLocation: (newLocation: Location) => Navigation
+    history: NavigationHistory;
+    current: Location;
+    addLocation(newLocation: Location) : Navigation;
   }
   
+  interface NavigationHistory {
+    value: Location;
+    previous?: NavigationHistory;
+  }
 }
 export type { DomainModel };

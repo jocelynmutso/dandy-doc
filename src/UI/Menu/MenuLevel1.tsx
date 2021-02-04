@@ -10,6 +10,9 @@ import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
 import Divider from '@material-ui/core/Divider';
 
+import { UIContext }  from '../Context/Context';
+import { DomainModel }  from '../../DomainModel';
+
 
 const useStyles = makeStyles((theme) => ({
   nested: {
@@ -28,18 +31,19 @@ const useStyles = makeStyles((theme) => ({
 
 interface MenuLevel1Props { 
   children?: React.ReactNode | React.ReactNode[];
-  open: boolean,
-  name: string
+  topic: DomainModel.Topic;
 }
 
-const MenuLevel1: React.FC<MenuLevel1Props> = ({children, open, name}) => {
+const MenuLevel1: React.FC<MenuLevel1Props> = ({children, topic}) => {
   const classes = useStyles();
-  
+  const { site, nav, setTopic } = React.useContext(UIContext);
+  const open = nav.current.topic?.id == topic.id;
+  const handleOnClick = () => setTopic(topic);
+    
   return (<React.Fragment>
-
-    <ListItem button className={classes.nested}>
+    <ListItem button className={classes.nested} onClick={handleOnClick}>
       <ListItemText>
-        <span className={classes.primaryText}>{name}</span>
+        <span className={classes.primaryText}>{topic.name}</span>
       </ListItemText>
       {open ? <ExpandLess /> : <ExpandMore />}
     </ListItem>

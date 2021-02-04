@@ -1,4 +1,6 @@
 import { DomainModel } from './DomainModel';
+import { Service, ServiceImpl } from './Service';
 
-export type { DomainModel };
-export { ImmutableSubTopic, ImmutableTopic, ImmutableSite, ImmutableMd } from './Immutables';
+export type { DomainModel, Service };
+export {ServiceImpl};
+export { ImmutableSubTopic, ImmutableTopic, ImmutableSite, ImmutableMd, ImmutableNavigation } from './Immutables';

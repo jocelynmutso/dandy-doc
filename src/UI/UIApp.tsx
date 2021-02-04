@@ -8,6 +8,7 @@ import { Layout, LayoutTop, LayoutLeft } from './Layout';
 import Brand from './Brand';
 import Search from './Search';
 import { MenuLevel1, MenuLevel2 } from './Menu';
+import { MarkdownView } from './Markdown';
 import { UIContext }  from './Context/Context';
 
 //create layout here
@@ -17,35 +18,28 @@ interface UIAppProps { //config object, keep everything here
   brand: { title: string },
   theme: {
     primary: Theme,
-    secondary: Theme
+    secondary?: Theme
   }
 }
 
 const UIApp: React.FC<UIAppProps> = ({theme, brand}) => {
-  const { site } = React.useContext(UIContext);
-  
-  
-  const drawer = { 
-    width: 260,
-    open: true 
-  };
+  const { site, nav } = React.useContext(UIContext);
+  const drawer = { width: 260, open: true };
  
-  const createMenuLevel2 = (item: DomainModel.SubTopic, index: number) => {
-    return (<MenuLevel2 key={index}>{item.name}</MenuLevel2>);
-  }
-  
-  const createMenuLevel1 = (item: DomainModel.Topic, index: number) => {
-    const children = item.subTopics.map(createMenuLevel2);
-    return (
-      <MenuLevel1 key={index} name={item.name} open={true}>
-        {children}
-      </MenuLevel1>
-    );
-  }
+  const createMenuLevel2 = (item: DomainModel.SubTopic, index: number) =>(
+    <MenuLevel2 key={index} subTopic={item} />
+  );
+ 
+  const createMenuLevel1 = (item: DomainModel.Topic, index: number) => (
+    <MenuLevel1 key={index} topic={item}>
+      {item.subTopics.map(createMenuLevel2)}
+    </MenuLevel1>
+  );
   
   const menus = site.topics.map(createMenuLevel1);
  
-  const left = (<ThemeProvider theme={(outer) => ({...outer, ...theme.secondary})}>
+  const leftTheme = theme.secondary ? theme.secondary : theme.primary; 
+  const left = (<ThemeProvider theme={(outer) => ({...outer, ...leftTheme})}>
     <LayoutLeft drawer={drawer}>
       {menus}
     </LayoutLeft>
@@ -56,9 +50,11 @@ const UIApp: React.FC<UIAppProps> = ({theme, brand}) => {
     <Search />
   </LayoutTop>);
   
+  const center = nav.current.subTopic ? (<MarkdownView subTopic={nav.current.subTopic.value}/>) : null;
+  
   return (
     <ThemeProvider theme={theme.primary}>
-      <Layout top={top} left={left} center={<div />} />
+      <Layout top={top} left={left} center={center} />
     </ThemeProvider>
 
   );
