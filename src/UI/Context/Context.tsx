@@ -30,13 +30,12 @@ interface UIContextProviderProps {
 
 const UIContextProvider: React.FC<UIContextProviderProps> = (props) => {
   const [site, siteDispatch] = React.useReducer(siteReducer, service.createSite(props.md)); 
-   
+  
   //link reducer to react hook with initial state
   //const initNav = React.useMemo(() => service.createNav(site, props.route), [props.route]);
   const initNav = service.createNav(site, props.route);
   const [nav, navDispatch] = React.useReducer(navReducer, initNav);
 
- 
   //overwrite initial values anyway
   const contextValue: UIContextType = { 
     site, nav,
@@ -55,11 +54,25 @@ const UIContextProvider: React.FC<UIContextProviderProps> = (props) => {
     }
   };
   
+  console.log("latest site", site);
+  
   React.useEffect(() => {
     const route = service.createRoute(nav);
     if(route) {
       props.history.push(route); 
     }
+    // site init
+    if(!nav.history.previous && 
+      nav.current.subTopic && 
+      !nav.current.subTopic.value.md.loaded) {
+      
+      // load
+      service
+      .fetch(nav.current.subTopic.value)
+      .then(newMarkdown => siteDispatch({type: "setMarkdown", newMarkdown }));
+      
+    }
+    
   }, [service, nav])
   
   //initialise provider

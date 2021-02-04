@@ -27,13 +27,13 @@ type AnchorRef = {
 }
 
 interface MarkdownViewProps {
-  subTopic: DomainModel.SubTopic;
+  id: string;
 }
 
 
-const MarkdownView: React.FC<MarkdownViewProps> = ({subTopic}) => {
+const MarkdownView: React.FC<MarkdownViewProps> = ({id}) => {
   const classes = useStyles();
-  const { nav, setAnchor } = React.useContext(UIContext);
+  const { nav, setAnchor, site } = React.useContext(UIContext);
       
   const anchorRefs: AnchorRef[] = React.useMemo(() => [], []);
   const createAnchorRef = (name: string): React.RefObject<HTMLSpanElement> => {
@@ -50,10 +50,10 @@ const MarkdownView: React.FC<MarkdownViewProps> = ({subTopic}) => {
   const onAnchorClick = (anchor: string) => {
     setAnchor(anchor)
   };
+  const subTopic = site.getSubTopic(id);
   
   // Scroll to when markdown is loaded
   React.useEffect(() => {
-    
     const anchor = nav.current.subTopic?.anchor;
     if(anchor) {
       const found: AnchorRef[] = anchorRefs.filter(r => r.name === `{#${anchor}}`);
@@ -62,11 +62,11 @@ const MarkdownView: React.FC<MarkdownViewProps> = ({subTopic}) => {
         const top = current.getBoundingClientRect().top;
         window.scrollTo({top: top-80, behavior: "smooth"});
       } else {
-        console.log("md not loaded yet", subTopic);
+        console.log("md not loaded yet", id);
       }
     }
   }, [nav, anchorRefs, subTopic])
- 
+  
   
   return (<div>
     <div className={classes.root}>

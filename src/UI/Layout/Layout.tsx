@@ -1,10 +1,10 @@
 import React from 'react';
 import { Theme, makeStyles, createStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
+import clsx from 'clsx';
 
 
-
-const useStyles = makeStyles((theme: Theme) =>
+const useStyles = (drawerWidth: number) => makeStyles((theme: Theme) =>
   createStyles({
     root: {
       display: 'flex',
@@ -27,7 +27,7 @@ const useStyles = makeStyles((theme: Theme) =>
         easing: theme.transitions.easing.sharp,
         duration: theme.transitions.duration.leavingScreen,
       }),
-     
+      marginLeft: -drawerWidth,
     },
     contentShift: {
       transition: theme.transitions.create('margin', {
@@ -37,22 +37,30 @@ const useStyles = makeStyles((theme: Theme) =>
       marginLeft: 0,
     },
   })
-);
+)();
 
 
 interface LayoutProps {
   top: React.ReactNode,
   left: React.ReactNode,
   center: React.ReactNode,
+  drawer: {
+    width: number,
+    open: boolean
+  }
 }
 
-const Layout: React.FC<LayoutProps> = ({top, left, center}) => {
-  const classes = useStyles();
-  
+const Layout: React.FC<LayoutProps> = ({top, left, center, drawer}) => {
+  const classes = useStyles(drawer.width);
   
   return (<div className={classes.root}>
     <CssBaseline />
-    {top}{left}{center}
+    {top}
+    {left}
+    <main className={clsx(classes.content, { [classes.contentShift]: drawer.open}) }>
+     <div className={classes.drawerHeader} />
+     {center}
+    </main>
   </div>
   
 )}
