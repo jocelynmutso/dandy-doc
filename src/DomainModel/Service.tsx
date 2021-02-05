@@ -75,9 +75,19 @@ class ServiceImpl implements Service {
       return id.substring(0, id.length-3);
     }
     
+    
+    function toTitleCase(str) {
+      return str.replace(
+        /\w\S*/g,
+        function(txt) {
+          return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+        }
+      );
+    }
+    
     const cleanName = (name) => {
-      let cleanName = name.substring(0, name.length -3)
-      return cleanName
+      let cleanName = name.replaceAll("-", " ").substring(0, name.length -3)
+      return cleanName;
     }
     
     // 1. iterate over m and create topics and sub topics
@@ -90,10 +100,10 @@ class ServiceImpl implements Service {
       const url = file.url;
       const content = file.content;
       
-      const id = cleanSubTopicId(name);
+      const id = cleanSubTopicId(file.name);
       const sections: string[] = name.substring(2).split("/");
-      const topicName = sections.slice(0, sections.length -1).join(" ");
-      const topicSubName = sections[sections.length -1];
+      const topicName = toTitleCase(sections.slice(0, sections.length -1).join(" "));
+      const topicSubName = toTitleCase(sections[sections.length -1]);
       
       const md = new ImmutableMd(url, content ? true : false, content);
       const subTopic = new ImmutableSubTopic(id, topicName, topicSubName, md);
