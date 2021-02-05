@@ -13,7 +13,10 @@ import { UIContextProvider }  from './UI/Context/Context';
 //create content for left, top, and center here
 
 interface DandyProps { //config object, keep everything here
-  brand: { title: string },
+  brand: { 
+    title?: string;
+    logo?: React.ReactNode; 
+  },
   theme: {
     primary: Theme,
     secondary?: Theme

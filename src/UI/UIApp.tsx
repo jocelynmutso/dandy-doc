@@ -15,7 +15,10 @@ import { UIContext }  from './Context/Context';
 //create content for left, top, and center here
 
 interface UIAppProps { //config object, keep everything here
-  brand: { title: string },
+  brand: { 
+    title?: string,
+    logo?: React.ReactNode,
+  },
   theme: {
     primary: Theme,
     secondary?: Theme
@@ -46,7 +49,7 @@ const UIApp: React.FC<UIAppProps> = ({theme, brand}) => {
   </ThemeProvider>);
   
   const top = (<LayoutTop drawer={drawer}>
-    <Brand title={brand.title} />
+    <Brand logo={brand.logo} title={brand.title} />
     <Search />
   </LayoutTop>);
   

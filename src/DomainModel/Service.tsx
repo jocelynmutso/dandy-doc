@@ -75,13 +75,18 @@ class ServiceImpl implements Service {
       return id.substring(0, id.length-3);
     }
     
+    const cleanName = (name) => {
+      let cleanName = name.substring(0, name.length -3)
+      return cleanName
+    }
+    
     // 1. iterate over m and create topics and sub topics
     // 1.1 split the file name into 2 - main topic name and sub topic name  
     // 1.2 create topic from first section
     // 1.3 create sub topic from second section
     const mains: Record<string, DomainModel.SubTopic[]> = {}; //create keys that are strings, will be topic names
     for(let file of mdFiles.files ) {
-      const name = file.name;
+      const name = cleanName(file.name);
       const url = file.url;
       const content = file.content;
       

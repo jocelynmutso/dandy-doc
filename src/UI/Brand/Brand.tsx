@@ -18,16 +18,16 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 
 interface BrandProps {
-  image?: HTMLImageElement,
-  title: string
+  logo?: React.ReactNode,
+  title?: string,
 }
 
-const Brand: React.FC<BrandProps> = ({image, title}) => {
+const Brand: React.FC<BrandProps> = ({logo, title}) => {
   const classes = useStyles();
   
   
   return (<React.Fragment>
-      {image}
+      {logo}
       <Typography variant="body1" noWrap className={classes.iconLink} style={{ flex: 1 }} >
         {title}
       </Typography>
