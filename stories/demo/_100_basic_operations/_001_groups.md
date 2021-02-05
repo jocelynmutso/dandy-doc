@@ -2,7 +2,7 @@
 
 ## Quick Summary
 
-[What is a valueset?](#advanced-operations/csv/valueset)  
+[What is a valueset?](#_105_advanced_operations/csv/valueset)  
 
 * Groups exist within pages
 * Only visibility logic rules can be applied to groups

@@ -70,24 +70,52 @@ class ServiceImpl implements Service {
   createSite(mdFiles: DomainModel.MdFiles) {
     const subs: DomainModel.SubTopic[] = [];
     
-    const cleanSubTopicId = (name) => {
+    /* 
+    
+    1. check if a markdown file starts with _000_
+    2. if it does, substring(), replace with empty string
+    
+    */
+    
+    const isPrefix = (name: string): boolean => {
+      if (name.length <= 5) {
+        return false;
+      } 
+      const prefix = name.substring(0,5);
+      if (prefix.startsWith("_") && prefix.endsWith("_"))  {
+        const orderNumber = prefix.substring(1, 4);
+        return /^\d+$/.test(orderNumber);
+      }
+      return false;
+    }
+    
+    const extractOrderNumber = (input: string): number => {
+      if (isPrefix(input)) {
+        return parseInt(input.substring(1, 4));
+      } 
+      return 0;
+    }
+    
+    // cut start and end
+    const cleanFileName = (name: string): string => {
       const id = name.startsWith("./") ? name.substring(2) : name;
       return id.substring(0, id.length-3);
     }
     
     
     function toTitleCase(str) {
-      return str.replace(
+      if(isPrefix(str)) {
+        str = str.substring(5)
+      }
+      return str
+       .replaceAll("\/", " ")
+       .replaceAll("_", " ")
+       .replace(
         /\w\S*/g,
         function(txt) {
           return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
         }
       );
-    }
-    
-    const cleanName = (name) => {
-      let cleanName = name.replaceAll("-", " ").substring(0, name.length -3)
-      return cleanName;
     }
     
     // 1. iterate over m and create topics and sub topics
@@ -96,24 +124,24 @@ class ServiceImpl implements Service {
     // 1.3 create sub topic from second section
     const mains: Record<string, DomainModel.SubTopic[]> = {}; //create keys that are strings, will be topic names
     for(let file of mdFiles.files ) {
-      const name = cleanName(file.name);
+      const fileName = cleanFileName(file.name);
+      
+      const topicId = fileName.substring(0, fileName.lastIndexOf("/")).replace("/", "_");
+      const subTopicId = topicId + "/" + fileName.substring(fileName.lastIndexOf("/") + 1);
+      
       const url = file.url;
       const content = file.content;
-      
-      const id = cleanSubTopicId(file.name);
-      const sections: string[] = name.substring(2).split("/");
-      const topicName = toTitleCase(sections.slice(0, sections.length -1).join(" "));
-      const topicSubName = toTitleCase(sections[sections.length -1]);
-      
+      const topicSubName = toTitleCase(fileName.substring(fileName.lastIndexOf("/")+ 1));
+
       const md = new ImmutableMd(url, content ? true : false, content);
-      const subTopic = new ImmutableSubTopic(id, topicName, topicSubName, md);
+      const subTopic = new ImmutableSubTopic(subTopicId, topicId, topicSubName, md);
       
       subs.push(subTopic);
       
-      let topic = mains[topicName]; //keys are topic names
+      let topic = mains[topicId]; //keys are topic names
       if (!topic){
         topic = []; // if no topic is present, create one as empty array
-        mains[topicName] = topic; //puts topic, which is empty array, into main topic
+        mains[topicId] = topic; //puts topic, which is empty array, into main topic
       }
       
       topic.push(subTopic);    
@@ -121,7 +149,8 @@ class ServiceImpl implements Service {
  
     const createMainTopic = (index: string) => {
       const subTopics = mains[index]; //all main topics for subtopic
-      return new ImmutableTopic(index, index, subTopics);
+      const topicTitle = toTitleCase(index);
+      return new ImmutableTopic(index, topicTitle, subTopics);
     }
     
     const allMainTopics: DomainModel.Topic[] = Object.keys(mains).map(createMainTopic);
