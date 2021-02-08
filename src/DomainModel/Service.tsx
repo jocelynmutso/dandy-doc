@@ -8,6 +8,7 @@ interface Service {
   createSite(files: DomainModel.MdFiles): DomainModel.Site;
 }
 
+const PREFIX_LENGTH = 4;
 
 class ServiceImpl implements Service {
 
@@ -78,12 +79,12 @@ class ServiceImpl implements Service {
     */
     
     const isPrefix = (name: string): boolean => {
-      if (name.length <= 5) {
+      if (name.length <= PREFIX_LENGTH) {
         return false;
       } 
-      const prefix = name.substring(0,5);
-      if (prefix.startsWith("_") && prefix.endsWith("_"))  {
-        const orderNumber = prefix.substring(1, 4);
+      const prefix = name.substring(0, PREFIX_LENGTH);
+      if (prefix.endsWith("_"))  {
+        const orderNumber = prefix.substring(1, PREFIX_LENGTH-1);
         return /^\d+$/.test(orderNumber);
       }
       return false;
@@ -91,7 +92,7 @@ class ServiceImpl implements Service {
     
     const extractOrderNumber = (input: string): number => {
       if (isPrefix(input)) {
-        return parseInt(input.substring(1, 4));
+        return parseInt(input.substring(1, PREFIX_LENGTH-1));
       } 
       return 0;
     }
@@ -105,7 +106,7 @@ class ServiceImpl implements Service {
     
     function toTitleCase(str) {
       if(isPrefix(str)) {
-        str = str.substring(5)
+        str = str.substring(PREFIX_LENGTH)
       }
       return str
        .replaceAll("\/", " ")
