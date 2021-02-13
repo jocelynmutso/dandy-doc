@@ -3,7 +3,6 @@ import React from 'react';
 import { Theme, ThemeProvider } from '@material-ui/core/styles';
 
 import { DomainModel } from '../DomainModel'
-
 import { Layout, LayoutTop, LayoutLeft } from './Layout';
 import Brand from './Brand';
 import Search from './Search';
@@ -29,7 +28,7 @@ const UIApp: React.FC<UIAppProps> = ({theme, brand}) => {
   const { site, nav } = React.useContext(UIContext);
   const [ drawerOpen, setDrawerOpen ] = React.useState<boolean>(true);
   const drawer = { width: 260, open: drawerOpen, setOpen: () => setDrawerOpen(!drawerOpen) };
- 
+   
   const createMenuLevel2 = (item: DomainModel.SubTopic, index: number) =>(
     <MenuLevel2 key={index} subTopic={item} />
   );

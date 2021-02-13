@@ -40,6 +40,13 @@ const MenuLevel1: React.FC<MenuLevel1Props> = ({children, topic}) => {
   const topicSelected = nav.current.topic?.id == topic.id;
   const [open, setOpen] = React.useState<boolean>(topicSelected)
   
+  React.useEffect(() => {
+    if(topicSelected && !open) {
+      setOpen(true);
+    }
+    
+  }, [topicSelected])
+  
   return (<React.Fragment>
     <ListItem button className={classes.nested} onClick={() => setOpen(!open)}>
       <ListItemText>
