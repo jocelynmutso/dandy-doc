@@ -1,6 +1,6 @@
 {
   "name": "@jocelynmutso/dandy-doc",
-  "version": "1.0.17",
+  "version": "1.0.18",
   "description": "Markdown visualiser",
   "main": "build/index.js",
   "types": "build/index.d.ts",
@@ -36,6 +36,10 @@
     "@material-ui/core": "^4.10.*",
     "@material-ui/icons": "^4.9.*"
   },
+  "dependencies": {
+    "react-markdown": "^5.0.3",
+    "remark-gfm": "^1.0.0"
+  },
   "devDependencies": {
     "@babel/core": "^7.10.3",
     "@material-ui/core": "^4.11.2",
@@ -51,9 +55,7 @@
     "mocha": "^8.2.1",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
-    "react-markdown": "^5.0.3",
     "react-router-dom": "^5.2.0",
-    "remark-gfm": "^1.0.0",
     "ts-loader": "^7.0.5",
     "typescript": "^4.1.3"
   }
