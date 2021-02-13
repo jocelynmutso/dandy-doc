@@ -29,12 +29,11 @@ interface UIContextProviderProps {
 }
 
 const UIContextProvider: React.FC<UIContextProviderProps> = (props) => {
-  const [site, siteDispatch] = React.useReducer(siteReducer, service.createSite(props.md)); 
+  const [site, siteDispatch] = React.useReducer(siteReducer, React.useMemo(() => service.createSite(props.md), [props.md])); 
   
   //link reducer to react hook with initial state
   //const initNav = React.useMemo(() => service.createNav(site, props.route), [props.route]);
-  const initNav = service.createNav(site, props.route);
-  const [nav, navDispatch] = React.useReducer(navReducer, initNav);
+  const [nav, navDispatch] = React.useReducer(navReducer, React.useMemo(() => service.createNav(site, props.route), [props.md]));
 
   //overwrite initial values anyway
   const contextValue: UIContextType = { 
@@ -53,8 +52,6 @@ const UIContextProvider: React.FC<UIContextProviderProps> = (props) => {
       navDispatch({ type: "setAnyPath", site, anyPath })
     }
   };
-  
-  console.log("latest site", site);
   
   React.useEffect(() => {
     const route = service.createRoute(nav);

@@ -61,7 +61,7 @@ const Link = (onClick: (anchor: string) => void, props: any) => {
       }
     }>{props.node.children[0].value}</a>        
   }
-  return (<a href={props.href} onClick={(e) => {e.preventDefault();}}>link</a>);
+  return (<a {...props} />);
 }
 
 const Renderers = { Text, Image, Link, ViewPlugin };

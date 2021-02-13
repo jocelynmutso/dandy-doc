@@ -1,5 +1,7 @@
 import React from 'react';
 import ReactMarkdown from 'react-markdown'
+import gfm from 'remark-gfm';
+
 import LinearProgress from '@material-ui/core/LinearProgress';
 import { Theme, makeStyles, createStyles } from '@material-ui/core/styles';
 import Fade from '@material-ui/core/Fade';
@@ -77,7 +79,7 @@ const MarkdownView: React.FC<MarkdownViewProps> = ({id}) => {
   
     { subTopic.md.loaded ? (<ReactMarkdown 
         source={subTopic.md.src ? subTopic.md.src : ''}
-        plugins={[Renderers.ViewPlugin]} 
+        plugins={[Renderers.ViewPlugin, gfm]} 
         renderers={{ 
           image: Renderers.Image,
           link: (props) => Renderers.Link(onAnchorClick, props),

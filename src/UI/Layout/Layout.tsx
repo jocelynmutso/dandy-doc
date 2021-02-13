@@ -50,19 +50,20 @@ interface LayoutProps {
   }
 }
 
-const Layout: React.FC<LayoutProps> = ({top, left, center, drawer}) => {
+const Layout: React.FC<LayoutProps> = ({ top, left, center, drawer }) => {
   const classes = useStyles(drawer.width);
-  
+
   return (<div className={classes.root}>
     <CssBaseline />
     {top}
     {left}
-    <main className={clsx(classes.content, { [classes.contentShift]: drawer.open}) }>
-     <div className={classes.drawerHeader} />
-     {center}
+    <main className={clsx(classes.content, { [classes.contentShift]: drawer.open })}>
+      <div className={classes.drawerHeader} />
+      {center}
     </main>
   </div>
-  
-)}
+
+  )
+}
 
 export default Layout;

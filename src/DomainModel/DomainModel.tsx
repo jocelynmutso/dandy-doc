@@ -2,6 +2,7 @@ declare namespace DomainModel {
   
   interface Site {
     topics: Topic[],
+    subTopics: SubTopic[],
     getTopic(id: string): Topic;
     findTopic(id: string): Topic | undefined;
     getSubTopic(id: string): SubTopic;

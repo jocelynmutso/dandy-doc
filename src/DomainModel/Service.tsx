@@ -46,6 +46,8 @@ class ServiceImpl implements Service {
   }
   
   createNav(site: DomainModel.Site, route: {topic?: string, subTopic?: string, anchor?: string}): DomainModel.Navigation {
+    console.log("created initial nav: " + route);
+    
     let subTopicId: string | undefined;
     if(route.subTopic) {
       subTopicId = (route.topic? route.topic: "") + "/" + route.subTopic;
@@ -65,7 +67,16 @@ class ServiceImpl implements Service {
       return new ImmutableNavigation({ topic })
     }
     
-    return new ImmutableNavigation()
+    console.log("no navigation defined")
+    if(site.subTopics.length > 0) {
+      const welcomeTopic = site.subTopics[0];
+      return new ImmutableNavigation({ 
+        topic: site.getTopic(welcomeTopic.topicId),
+        subTopic: { value: welcomeTopic }
+      })
+    }
+    
+    return new ImmutableNavigation();
   }
   
   createSite(mdFiles: DomainModel.MdFiles) {
@@ -73,7 +84,7 @@ class ServiceImpl implements Service {
     
     /* 
     
-    1. check if a markdown file starts with _000_
+    1. check if a markdown file starts with 000_
     2. if it does, substring(), replace with empty string
     
     */
@@ -126,9 +137,10 @@ class ServiceImpl implements Service {
     const mains: Record<string, DomainModel.SubTopic[]> = {}; //create keys that are strings, will be topic names
     for(let file of mdFiles.files ) {
       const fileName = cleanFileName(file.name);
-      
       const topicId = fileName.substring(0, fileName.lastIndexOf("/")).replace("/", "_");
       const subTopicId = topicId + "/" + fileName.substring(fileName.lastIndexOf("/") + 1);
+      
+      //console.log(file.name, topicId, subTopicId);
       
       const url = file.url;
       const content = file.content;
@@ -155,7 +167,10 @@ class ServiceImpl implements Service {
     }
     
     const allMainTopics: DomainModel.Topic[] = Object.keys(mains).map(createMainTopic);
-    return new ImmutableSite(subs, allMainTopics);
+    const initSite = new ImmutableSite(subs, allMainTopics);
+    
+    console.log("Site created: ", initSite);
+    return initSite;
   }
 }
 
