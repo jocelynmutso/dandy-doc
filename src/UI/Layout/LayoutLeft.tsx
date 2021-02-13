@@ -39,7 +39,8 @@ const useStyles = (drawerWidth: number) => makeStyles((theme: Theme) =>
 interface LayoutLeftProps {
   drawer: {
     width: number,
-    open: boolean
+    open: boolean,
+    setOpen: () => void
   },
   children:  React.ReactNode | React.ReactNode[]
   
@@ -56,7 +57,7 @@ const LayoutLeft: React.FC<LayoutLeftProps> = ({drawer, children}) => {
       classes={{paper: classes.drawerPaper}}>
 
       <div className={classes.drawerHeader}>
-        <IconButton onClick={() => {}} className={classes.iconButton}>
+        <IconButton onClick={() => drawer.setOpen()} className={classes.iconButton}>
           {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
         </IconButton>
       </div>      

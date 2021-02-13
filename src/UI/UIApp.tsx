@@ -27,7 +27,8 @@ interface UIAppProps { //config object, keep everything here
 
 const UIApp: React.FC<UIAppProps> = ({theme, brand}) => {
   const { site, nav } = React.useContext(UIContext);
-  const drawer = { width: 260, open: true };
+  const [ drawerOpen, setDrawerOpen ] = React.useState<boolean>(true);
+  const drawer = { width: 260, open: drawerOpen, setOpen: () => setDrawerOpen(!drawerOpen) };
  
   const createMenuLevel2 = (item: DomainModel.SubTopic, index: number) =>(
     <MenuLevel2 key={index} subTopic={item} />

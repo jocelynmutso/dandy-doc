@@ -10,8 +10,6 @@ import MenuIcon from '@material-ui/icons/Menu';
 import SearchIcon from '@material-ui/icons/Search';
 
 
-
-
 const useStyles = (drawerWidth: number) => makeStyles((theme: Theme) =>
   createStyles({
     root: {
@@ -44,6 +42,7 @@ interface LayoutTopProps {
   drawer: {
     width: number,
     open: boolean;
+    setOpen: () => void;
   }
   children: React.ReactNode[];
 }
@@ -60,7 +59,7 @@ const LayoutTop: React.FC<LayoutTopProps> = ({drawer, children}) => {
         <IconButton
           //color="inherit"
           aria-label="open drawer"
-          onClick={() => {}}
+          onClick={() => drawer.setOpen()}
           edge="start"
           className={clsx(classes.menuButton, drawer.open && classes.hide)}>
           <MenuIcon color="primary"/>
