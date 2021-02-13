@@ -36,12 +36,12 @@ interface MenuLevel1Props {
 
 const MenuLevel1: React.FC<MenuLevel1Props> = ({children, topic}) => {
   const classes = useStyles();
-  const { site, nav, setTopic } = React.useContext(UIContext);
-  const open = nav.current.topic?.id == topic.id;
-  const handleOnClick = () => setTopic(topic);
-    
+  const { nav } = React.useContext(UIContext);
+  const topicSelected = nav.current.topic?.id == topic.id;
+  const [open, setOpen] = React.useState<boolean>(topicSelected)
+  
   return (<React.Fragment>
-    <ListItem button className={classes.nested} onClick={handleOnClick}>
+    <ListItem button className={classes.nested} onClick={() => setOpen(!open)}>
       <ListItemText>
         <span className={classes.primaryText}>{topic.name}</span>
       </ListItemText>
