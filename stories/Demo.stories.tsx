@@ -21,6 +21,7 @@ const logo = requirePng.keys().map(fileName => {
 const requireModule: RequireContext = require.context("./demo/", true, /\.md$/)
 
 const mdFiles: DomainModel.MdFiles = {
+  build: Date.now()/1000,
   files: requireModule
   .keys()
   .map((fileName: string) => {
