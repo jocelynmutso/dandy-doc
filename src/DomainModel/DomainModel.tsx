@@ -1,6 +1,7 @@
 declare namespace DomainModel {
   
   interface Site {
+    build: number, 
     topics: Topic[],
     subTopics: SubTopic[],
     getTopic(id: string): Topic;
@@ -29,7 +30,13 @@ declare namespace DomainModel {
     url: string,
     loaded: boolean,
     anchors: string[],
-    src?: string
+    src?: string,
+    build?: MdBuild
+  }
+  
+  interface MdBuild {
+    created: number, 
+    modified: number
   }
   
   interface MdMutator {
@@ -40,10 +47,12 @@ declare namespace DomainModel {
   
   
   interface MdFiles {
+    build?: number,
     files: {  //markdown files to be displaoyed
       name: string,
       url: string,
       content?: string
+      build?: { created: number, modified: number }
     }[],
   }
   

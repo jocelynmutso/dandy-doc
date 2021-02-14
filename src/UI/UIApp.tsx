@@ -9,6 +9,7 @@ import Search from './Search';
 import { MenuLevel1, MenuLevel2 } from './Menu';
 import { MarkdownView } from './Markdown';
 import { UIContext }  from './Context/Context';
+import { BuildInfo } from './BuildInfo';
 
 //create layout here
 //create content for left, top, and center here
@@ -45,12 +46,13 @@ const UIApp: React.FC<UIAppProps> = ({theme, brand}) => {
   const left = (<ThemeProvider theme={(outer) => ({...outer, ...leftTheme})}>
     <LayoutLeft drawer={drawer}>
       {menus}
+      <BuildInfo />
     </LayoutLeft>
   </ThemeProvider>);
   
   const top = (<LayoutTop drawer={drawer}>
     <Brand logo={brand.logo} title={brand.title} />
-    <Search />
+    <Search theme={theme}/>
   </LayoutTop>);
   
   const center = nav.current.subTopic ? (<MarkdownView id={nav.current.subTopic.value.id}/>) : null;

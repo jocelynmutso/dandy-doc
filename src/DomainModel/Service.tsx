@@ -146,7 +146,7 @@ class ServiceImpl implements Service {
       const content = file.content;
       const topicSubName = toTitleCase(fileName.substring(fileName.lastIndexOf("/")+ 1));
 
-      const md = new ImmutableMd(url, content ? true : false, content);
+      const md = new ImmutableMd(url, content ? true : false, content, undefined, file.build);
       const subTopic = new ImmutableSubTopic(subTopicId, topicId, topicSubName, md);
       
       subs.push(subTopic);
@@ -167,7 +167,8 @@ class ServiceImpl implements Service {
     }
     
     const allMainTopics: DomainModel.Topic[] = Object.keys(mains).map(createMainTopic);
-    const initSite = new ImmutableSite(subs, allMainTopics);
+    const build = mdFiles.build ? mdFiles.build : Date.now()/1000;
+    const initSite = new ImmutableSite(build, subs, allMainTopics);
     
     console.log("Site created: ", initSite);
     return initSite;

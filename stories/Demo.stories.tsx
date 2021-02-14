@@ -28,7 +28,8 @@ const mdFiles: DomainModel.MdFiles = {
     return {
       url: fileName,
       content: m.default,
-      name: fileName 
+      name: fileName,
+      build: { created: 1610128748, modified: 1613232060 }
     };
   })
 };

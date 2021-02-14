@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { fade, Theme, makeStyles } from '@material-ui/core/styles';
+import { fade, Theme, makeStyles, ThemeProvider } from '@material-ui/core/styles';
 import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 import Grow from '@material-ui/core/Grow';
 import Paper from '@material-ui/core/Paper';
@@ -73,10 +73,13 @@ interface SearchResult {
 }
 
 interface SearchProps {
-
+  theme: {
+    primary: Theme,
+    secondary?: Theme
+  }
 }
 
-const Search: React.FC<SearchProps> = ({}) => {
+const Search: React.FC<SearchProps> = ({theme}) => {
   const classes = useStyles();
   const className = { root: classes.inputRoot, input: classes.inputInput };
   const inputProps = { 'aria-label': 'search' }
@@ -98,8 +101,7 @@ const Search: React.FC<SearchProps> = ({}) => {
       setTopic(topic);
     }
   };
- 
- 
+
   const setSearch = (input: string) => {
     
     const searchString = input.trim().toLowerCase();
@@ -177,7 +179,7 @@ const Search: React.FC<SearchProps> = ({}) => {
    
     return (<MenuItem key={index} onClick={(e) => handleClose(e, topic, subTopic)}>{desc}</MenuItem>)
   });
- 
+ const leftTheme = theme.secondary ? theme.secondary : theme.primary;
   return (<div className={classes.search}>
     <div className={classes.searchIcon}><SearchIcon color="primary" /></div>
 
@@ -189,6 +191,7 @@ const Search: React.FC<SearchProps> = ({}) => {
       classes={className}
       inputProps={inputProps} />
 
+              <ThemeProvider theme={(outer) => ({...outer, ...leftTheme})}>
     <Popper open={open} anchorEl={anchorRef.current} role={undefined} transition disablePortal>
       {({ TransitionProps, placement }) => (
         <Grow
@@ -200,13 +203,12 @@ const Search: React.FC<SearchProps> = ({}) => {
               <MenuList id="menu-list-grow" className={classes.searchResult}>
                 {searchSelection}
               </MenuList>
-              
             </ClickAwayListener>
           </Paper>
         </Grow>
       )}
     </Popper>
-
+              </ThemeProvider>
   
   </div>);
 }
