@@ -53,6 +53,7 @@ const MarkdownView: React.FC<MarkdownViewProps> = ({}) => {
   };
   
   const id = nav.current.subTopic?.value.id;
+  const subTopic = id ? site.getSubTopic(id) : undefined;
   
   // Scroll to when markdown is loaded
   React.useEffect(() => {
@@ -67,13 +68,11 @@ const MarkdownView: React.FC<MarkdownViewProps> = ({}) => {
         console.log("md not loaded yet", id);
       }
     }
-  }, [nav, anchorRefs, id])
+  }, [nav, anchorRefs, id, subTopic])
   
-  if(!id) {
+  if(!subTopic) {
     return null;
   }
-
-  const subTopic = site.getSubTopic(id);
   
   return (<div>
     <div className={classes.root}>
