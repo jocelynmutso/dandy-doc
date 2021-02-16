@@ -55,7 +55,7 @@ const UIApp: React.FC<UIAppProps> = ({theme, brand}) => {
     <Search theme={theme}/>
   </LayoutTop>);
   
-  const center = nav.current.subTopic ? (<MarkdownView id={nav.current.subTopic.value.id}/>) : null;
+  const center = nav.current.subTopic ? (<MarkdownView />) : null;
   
   return (
     <ThemeProvider theme={theme.primary}>

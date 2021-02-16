@@ -29,11 +29,10 @@ type AnchorRef = {
 }
 
 interface MarkdownViewProps {
-  id: string;
 }
 
 
-const MarkdownView: React.FC<MarkdownViewProps> = ({id}) => {
+const MarkdownView: React.FC<MarkdownViewProps> = ({}) => {
   const classes = useStyles();
   const { nav, setAnchor, site } = React.useContext(UIContext);
       
@@ -52,7 +51,8 @@ const MarkdownView: React.FC<MarkdownViewProps> = ({id}) => {
   const onAnchorClick = (anchor: string) => {
     setAnchor(anchor)
   };
-  const subTopic = site.getSubTopic(id);
+  
+  const id = nav.current.subTopic?.value.id;
   
   // Scroll to when markdown is loaded
   React.useEffect(() => {
@@ -67,8 +67,13 @@ const MarkdownView: React.FC<MarkdownViewProps> = ({id}) => {
         console.log("md not loaded yet", id);
       }
     }
-  }, [nav, anchorRefs, subTopic])
+  }, [nav, anchorRefs, id])
   
+  if(!id) {
+    return null;
+  }
+
+  const subTopic = site.getSubTopic(id);
   
   return (<div>
     <div className={classes.root}>

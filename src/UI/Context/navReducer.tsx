@@ -53,14 +53,15 @@ const navReducer = (oldState: DomainModel.Navigation, action: NavAction): Domain
         return oldState.addLocation({topic: oldState.current.topic, subTopic: { value: subTopic, anchor: action.anyPath }})
       }
       
-      const subTopicId = segments.slice(0, segments.length-1).join("/");
+      const subTopicId = segments.slice(0, 2).join("/");
       const subTopic = action.site.findSubTopic(subTopicId);
       if(!subTopic) {
-        console.error("sub topic not found by anchor link: " + action.anyPath);
+        console.error("sub topic not found by id: " + subTopicId + ", path: " + action.anyPath);
         return oldState;
       }
       const topic = action.site.getTopic(subTopic.topicId);
-      return oldState.addLocation({topic: topic, subTopic: { value: subTopic, anchor: segments[segments.length - 1] }})
+      const anchor = segments.length == 3 ? segments[segments.length - 1] : undefined;
+      return oldState.addLocation({topic: topic, subTopic: { value: subTopic, anchor }})
     }
   }
 }
