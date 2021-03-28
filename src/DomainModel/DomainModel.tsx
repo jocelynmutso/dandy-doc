@@ -21,6 +21,7 @@ declare namespace DomainModel {
   interface SubTopic {
     id: string,
     topicId: string;
+    subTopicId: string
     name: string,
     md: Md
     withMd(newMarkdown: MdMutator) : SubTopic;
@@ -59,17 +60,6 @@ declare namespace DomainModel {
   interface Location {
     topic?: Topic,
     subTopic?: { value: SubTopic, anchor?: string }
-  }
-  
-  interface Navigation {
-    history: NavigationHistory;
-    current: Location;
-    addLocation(newLocation: Location) : Navigation;
-  }
-  
-  interface NavigationHistory {
-    value: Location;
-    previous?: NavigationHistory;
   }
 }
 export type { DomainModel };

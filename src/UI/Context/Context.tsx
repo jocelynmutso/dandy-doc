@@ -1,13 +1,12 @@
 import React from 'react';
 import { History } from 'history';
 
-import { DomainModel, ImmutableNavigation, Service, ServiceImpl } from '../../DomainModel';
-import { navReducer } from './navReducer';
+import { DomainModel, ImmutableLocation, Service, ServiceImpl } from '../../DomainModel';
 import { siteReducer } from './siteReducer';
 
 interface UIContextType {//declare what is in the context
   site: DomainModel.Site;
-  nav: DomainModel.Navigation;
+  nav: DomainModel.Location;
 
   setTopic: (topic: DomainModel.Topic) => void;
   setSubTopic: (subTopic: DomainModel.SubTopic) => void;
@@ -29,45 +28,36 @@ interface UIContextProviderProps {
 }
 
 const UIContextProvider: React.FC<UIContextProviderProps> = (props) => {
+  
   const [site, siteDispatch] = React.useReducer(siteReducer, React.useMemo(() => service.createSite(props.md), [props.md])); 
   
   //link reducer to react hook with initial state
-  //const initNav = React.useMemo(() => service.createNav(site, props.route), [props.route]);
-  const [nav, navDispatch] = React.useReducer(navReducer, React.useMemo(() => service.createNav(site, props.route), [props.md]));
+  const nav = React.useMemo(() => service.createNav(site, props.route), [site, props.route]);
 
   //overwrite initial values anyway
   const contextValue: UIContextType = { 
     site, nav,
+    
     setTopic: (topic) => {
-      navDispatch({type: "setNewLocation", site, newLocation: { topic }})
+      const nav = service.createNav(site, {topic: topic.id});
+      props.history.push(service.createRoute(nav));   
     },
     setSubTopic: (subTopic) => {
-      navDispatch({type: "setNewLocation", site, newLocation: { subTopic: { value: subTopic } }})
-      
-      if(!subTopic.md.src) {
-        service.fetch(subTopic).then(newMarkdown => siteDispatch({type: "setMarkdown", newMarkdown }));
-      }
+      const nav = service.createNav(site, { topic: subTopic.topicId, subTopic: subTopic.subTopicId });
+      props.history.push(service.createRoute(nav)); 
     },
     setAnchor: (anyPath) => {
-      navDispatch({ type: "setAnyPath", site, anyPath })
+      props.history.push(service.createRoute(service.findNav(site, nav, anyPath))); 
     }
   };
   
+  
   React.useEffect(() => {
-    const route = service.createRoute(nav);
-    if(route) {
-      props.history.push(route); 
-    }
-    // site init
-    if(!nav.history.previous && 
-      nav.current.subTopic && 
-      !nav.current.subTopic.value.md.loaded) {
-      
+    const subTopic = nav.subTopic;
+    if(subTopic && !subTopic.value.md.loaded) {
       // load
-      service
-      .fetch(nav.current.subTopic.value)
+      service.fetch(subTopic.value)
       .then(newMarkdown => siteDispatch({type: "setMarkdown", newMarkdown }));
-      
     }
     
   }, [service, nav])
@@ -79,7 +69,7 @@ const UIContextProvider: React.FC<UIContextProviderProps> = (props) => {
 }
  
 const service: Service = new ServiceImpl();
-const initNav: DomainModel.Navigation = new ImmutableNavigation();
+const initNav: DomainModel.Location = new ImmutableLocation();
 const UIContext = React.createContext<UIContextType>({  
   site: { } as DomainModel.Site,
   nav: initNav,

@@ -52,12 +52,12 @@ const MarkdownView: React.FC<MarkdownViewProps> = ({}) => {
     setAnchor(anchor)
   };
   
-  const id = nav.current.subTopic?.value.id;
+  const id = nav.subTopic?.value.id;
   const subTopic = id ? site.getSubTopic(id) : undefined;
   
   // Scroll to when markdown is loaded
   React.useEffect(() => {
-    const anchor = nav.current.subTopic?.anchor;
+    const anchor = nav.subTopic?.anchor;
     if(anchor) {
       const found: AnchorRef[] = anchorRefs.filter(r => r.name === `{#${anchor}}`);
       if(found.length > 0 && found[0].value.current) {
@@ -77,7 +77,7 @@ const MarkdownView: React.FC<MarkdownViewProps> = ({}) => {
   return (<div>
     <div className={classes.root}>
       <Fade in={!subTopic.md.loaded}>
-      <LinearProgress color="secondary" />
+        <LinearProgress color="secondary" />
       </Fade>
     </div>
   

@@ -4,6 +4,7 @@
   "description": "Markdown visualiser",
   "main": "build/index.js",
   "types": "build/index.d.ts",
+
   "files": [
     "build"
   ],
@@ -15,7 +16,7 @@
     "build-storybook": "build-storybook"
   },
   "engines": {
-    "node": ">=15.0.1"
+    "node": ">=14.16.0"
   },
   "repository": {
     "type": "git",
@@ -27,7 +28,7 @@
     "visualiser"
   ],
   "author": "Jocelyn Mutso <“jocelyn.mutso@gmail.com”> (https://github.com/jocelynmutso/dandy-doc)",
-  "license": "Apache 2.0",
+  "license": "Apache-2.0",
   "bugs": {
     "url": "https://github.com/jocelynmutso/dandy-doc/issues"
   },

@@ -1,3 +1,5 @@
+/*
+
 import { DomainModel } from '../../DomainModel';
 
 
@@ -69,4 +71,4 @@ const navReducer = (oldState: DomainModel.Navigation, action: NavAction): Domain
 
 export type { NavAction };
 export { navReducer };
-
+*/

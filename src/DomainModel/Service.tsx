@@ -1,9 +1,10 @@
 import { DomainModel } from './DomainModel';
-import { ImmutableSubTopic, ImmutableMd, ImmutableTopic, ImmutableSite, ImmutableNavigation } from './Immutables';
+import { ImmutableSubTopic, ImmutableMd, ImmutableTopic, ImmutableSite, ImmutableLocation } from './Immutables';
 
 interface Service {
-  createRoute(location: DomainModel.Navigation): string | undefined;
-  createNav(site:DomainModel.Site, route: {topic?:string, subTopic?: string, anchor?: string}): DomainModel.Navigation;
+  createRoute(location: DomainModel.Location): string | undefined;
+  findNav(site: DomainModel.Site, oldState: DomainModel.Location, anyPath: string): DomainModel.Location;
+  createNav(site:DomainModel.Site, route: {topic?:string, subTopic?: string, anchor?: string}): DomainModel.Location;
   fetch(subTopic: DomainModel.SubTopic): Promise<DomainModel.MdMutator>
   createSite(files: DomainModel.MdFiles): DomainModel.Site;
 }
@@ -20,22 +21,45 @@ class ServiceImpl implements Service {
       if(response.ok) {
         return response.text();
       }
-      
+      console.error(response);
       return `# Can't fetch sub topic:'${url}'`;
     })
     .then(src => ({url, anchors: [], src}));
   }
   
-  createRoute(nav: DomainModel.Navigation): string | undefined {
+  findNav(site: DomainModel.Site, oldState: DomainModel.Location, anyPath: string): DomainModel.Location {
+    const segments: string[] = anyPath.split("\/");
+    if(segments.length === 1) {
+      const subTopic = oldState.subTopic?.value;
+      if(!subTopic) {
+        console.error("sub topic is undefined");
+        return oldState
+      }
+      
+      return new ImmutableLocation(oldState.topic, { value: subTopic, anchor: anyPath });
+    }
+    
+    const subTopicId = segments.slice(0, 2).join("/");
+    const subTopic = site.findSubTopic(subTopicId);
+    if(!subTopic) {
+      console.error("sub topic not found by id: " + subTopicId + ", path: " + anyPath);
+      return oldState;
+    }
+    const topic = site.getTopic(subTopic.topicId);
+    const anchor = segments.length == 3 ? segments[segments.length - 1] : undefined;
+    return new ImmutableLocation(topic, { value: subTopic, anchor })
+  }
+  
+  createRoute(current: DomainModel.Location): string | undefined {
     let newHistory: string | undefined;
     
-    if(nav.current.subTopic) {
-      newHistory = nav.current.subTopic.value.id;
-      if(nav.current.subTopic.anchor) {
-        newHistory += "/" + nav.current.subTopic.anchor;
+    if(current.subTopic) {
+      newHistory = current.subTopic.value.id;
+      if(current.subTopic.anchor) {
+        newHistory += "/" + current.subTopic.anchor;
       }
-    } else if(nav.current.topic) {
-      newHistory = nav.current.topic.id;
+    } else if(current.topic) {
+      newHistory = current.topic.id;
     }
     
     
@@ -45,9 +69,7 @@ class ServiceImpl implements Service {
     return undefined;
   }
   
-  createNav(site: DomainModel.Site, route: {topic?: string, subTopic?: string, anchor?: string}): DomainModel.Navigation {
-    console.log("created initial nav: " + route);
-    
+  createNav(site: DomainModel.Site, route: {topic?: string, subTopic?: string, anchor?: string}): DomainModel.Location {
     let subTopicId: string | undefined;
     if(route.subTopic) {
       subTopicId = (route.topic? route.topic: "") + "/" + route.subTopic;
@@ -57,26 +79,22 @@ class ServiceImpl implements Service {
     if(!subTopic && subTopicId) {
       console.error("No sub topic by id: " + subTopicId);
     } else if(subTopic) {
-      const location = {
-        topic: site.getTopic(subTopic.topicId), 
-        subTopic: { value: subTopic, anchor: route.anchor }
-      };
-      return new ImmutableNavigation(location)
+      return new ImmutableLocation(site.getTopic(subTopic.topicId), { value: subTopic, anchor: route.anchor })
     } else if(route.topic) {
       const topic : DomainModel.Topic | undefined = site.findTopic(route.topic);
-      return new ImmutableNavigation({ topic })
+      return new ImmutableLocation(topic)
     }
     
     console.log("no navigation defined")
     if(site.subTopics.length > 0) {
       const welcomeTopic = site.subTopics[0];
-      return new ImmutableNavigation({ 
-        topic: site.getTopic(welcomeTopic.topicId),
-        subTopic: { value: welcomeTopic }
-      })
+      return new ImmutableLocation(
+        site.getTopic(welcomeTopic.topicId),
+        { value: welcomeTopic }
+      )
     }
     
-    return new ImmutableNavigation();
+    return new ImmutableLocation();
   }
   
   createSite(mdFiles: DomainModel.MdFiles) {

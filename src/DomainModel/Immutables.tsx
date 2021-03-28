@@ -116,12 +116,14 @@ class ImmutableTopic implements DomainModel.Topic {
 class ImmutableSubTopic implements DomainModel.SubTopic {
   private _id: string;
   private _topicId: string;
+  private _subTopicId: string;
   private _name: string;
   private _md: DomainModel.Md;
   
   constructor(id: string, topicId: string, name: string, md: DomainModel.Md) {
     this._id = id;
     this._topicId = topicId;
+    this._subTopicId = id.substring(topicId.length + 1);
     this._name = name;
     this._md = md;
   }
@@ -131,6 +133,9 @@ class ImmutableSubTopic implements DomainModel.SubTopic {
   }
   get topicId(): string {
     return this._topicId;
+  }
+  get subTopicId(): string {
+    return this._subTopicId;
   }
   get name(): string {
     return this._name;
@@ -196,42 +201,6 @@ class ImmutableLocation implements DomainModel.Location {
   }
 }
 
-class ImmutableNavigationHistory implements DomainModel.NavigationHistory {
-  private _value: DomainModel.Location;
-  private _previous?: DomainModel.NavigationHistory;
-   
-  constructor(value: DomainModel.Location, previous?: DomainModel.NavigationHistory) {
-    this._value = value;
-    this._previous = previous;
-  }
-  get value(): DomainModel.Location {
-    return this._value;
-  }
-  get previous(): DomainModel.NavigationHistory | undefined {
-    return this._previous;
-  }
-}
+export { ImmutableSubTopic, ImmutableTopic, ImmutableSite, ImmutableMd, ImmutableLocation };
 
-class ImmutableNavigation implements DomainModel.Navigation {
-  private _current: DomainModel.Location;
-  private _history: DomainModel.NavigationHistory;
-   
-  constructor(current?: DomainModel.Location, history?: DomainModel.NavigationHistory) {
-    this._current = current ? current : new ImmutableLocation();
-    this._history = history ? history : new ImmutableNavigationHistory(this._current);
-  }
-  get current(): DomainModel.Location {
-    return this._current;
-  }
-  get history(): DomainModel.NavigationHistory {
-    return this._history;
-  }
-  addLocation(newLocation: DomainModel.Location): DomainModel.Navigation {
-    
-    return new ImmutableNavigation(
-      new ImmutableLocation(newLocation.topic, newLocation.subTopic), 
-      new ImmutableNavigationHistory(this._current, this._history));
-  }
-}
 
-export { ImmutableSubTopic, ImmutableTopic, ImmutableSite, ImmutableMd, ImmutableLocation, ImmutableNavigation };

@@ -31,7 +31,7 @@ interface MenuLevel2Props {
 const MenuLevel2: React.FC<MenuLevel2Props> = ({subTopic}) => {
   const classes = useStyles();
   const { site, nav, setSubTopic } = React.useContext(UIContext);
-  const open = nav.current.subTopic?.value.id == subTopic.id;
+  const open = nav.subTopic?.value.id == subTopic.id;
   const handleOnClick = () => setSubTopic(subTopic);
        
   return ( 

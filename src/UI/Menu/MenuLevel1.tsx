@@ -37,7 +37,7 @@ interface MenuLevel1Props {
 const MenuLevel1: React.FC<MenuLevel1Props> = ({children, topic}) => {
   const classes = useStyles();
   const { nav } = React.useContext(UIContext);
-  const topicSelected = nav.current.topic?.id == topic.id;
+  const topicSelected = nav.topic?.id == topic.id;
   const [open, setOpen] = React.useState<boolean>(topicSelected)
   
   React.useEffect(() => {
