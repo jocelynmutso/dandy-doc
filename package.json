@@ -1,6 +1,6 @@
 {
   "name": "@jocelynmutso/dandy-doc",
-  "version": "1.0.27",
+  "version": "1.0.28",
   "description": "Markdown visualiser",
   "main": "build/index.js",
   "types": "build/index.d.ts",
