@@ -2,22 +2,111 @@
 
 A library for use in Markdown visualisation
 
+## Requirements
+
+### Node minimum version
+
+v14.15.5
+
+---
 
 ## Installation
 
+### Or copy this package.json and omit dandy-doc dependency
+
+``` json
+{
+  "name": "my-app-namel",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@jocelynmutso/dandy-doc": "^1.0.28",
+    "@material-ui/core": "^4.11.2",
+    "@material-ui/icons": "^4.11.2",
+    "@resys/sipoo-mui-theme": "^0.1.1",
+    "@testing-library/jest-dom": "^5.11.6",
+    "@testing-library/react": "^11.2.2",
+    "@testing-library/user-event": "^12.5.0",
+    "@types/jest": "^26.0.19",
+    "@types/react": "^17.0.1",
+    "@types/react-dom": "^17.0.1",
+    "clsx": "^1.1.1",
+    "moment": "^2.29.1",
+    "react": "^17.0.1",
+    "react-dom": "^17.0.1",
+    "react-intl": "^5.8.6",
+    "react-router-dom": "^5.2.0",
+    "react-scripts": "4.0.1",
+    "typescript": "^4.1.3",
+    "web-vitals": "^0.2.4"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build",
+    "build": "rm -rf ./build && REACT_APP_SITE=$(ts-node -O \"{\\\"module\\\":\\\"commonjs\\\"}\" ./src/build-site.ts) react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject",
+    "build:site": "ts-node -O \"{\\\"module\\\":\\\"commonjs\\\"}\" ./src/build-site.ts"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "@types/node": "^12.19.9",
+    "@types/webpack-env": "^1.16.0",
+    "deasync": "^0.1.21",
+    "gh-pages": "^3.1.0",
+    "git-date-extractor": "^4.0.1",
+    "ts-node": "^9.1.1",
+    "zlib": "^1.0.5"
+  }
+}
+```
+
+### Install dandy-doc and other dependencies
+
   `yarn add @jocelynmutso/dandy-doc`
+  `yarn install`
+  
+---
+
+## Testing
+
+`yarn start` 
+
+---
 
 ## Usage
 
  TODO
  
-## Testing
- 
-`yarn storybook` 
 
-## Node minimum version
 
-v15.0.1
+---
+
+## Setting up the structure for a new application: Overview
+
+Folders (Topics) and Markdown files (Subtopics) will form the structure of the menu system. 
+
+Topics do not appear on the menu if they do not have at least one Subtopic inside.
+
+Naming Topics and Subtopics follows a specific logic.
 
 ---
 
@@ -75,13 +164,15 @@ To solve this problem, simply remove the colon from the markdown file name.
 
 ### Linking
 
-[Page link](#100_basic_operations/001_groups)
+`[Page link](#100_basic_operations/001_groups)`
 
-[Page and anchor link](#105_advanced_operations/csv/walkthrough)
+`[Page and anchor link](#105_advanced_operations/csv/walkthrough)`
 
 ## Theming
 
+TODO
 
 ## Adding brand / logo
 
+TODO
 
