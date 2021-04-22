@@ -8,11 +8,10 @@ A library for use in Markdown visualisation
 
 v14.15.5
 
----
 
 ## Installation
 
-### Or copy this package.json and omit dandy-doc dependency
+### Copy this package.json and omit dandy-doc dependency
 
 ``` json
 {
@@ -84,21 +83,17 @@ v14.15.5
   `yarn add @jocelynmutso/dandy-doc`
   `yarn install`
   
----
 
 ## Testing
 
 `yarn start` 
 
----
+
 
 ## Usage
 
  TODO
  
-
-
----
 
 ## Setting up the structure for a new application: Overview
 
@@ -107,8 +102,6 @@ Folders (Topics) and Markdown files (Subtopics) will form the structure of the m
 Topics do not appear on the menu if they do not have at least one Subtopic inside.
 
 Naming Topics and Subtopics follows a specific logic.
-
----
 
 ## Naming conventions and quirks
 
