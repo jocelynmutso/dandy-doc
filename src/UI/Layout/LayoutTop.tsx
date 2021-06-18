@@ -6,6 +6,8 @@ import IconButton from '@material-ui/core/IconButton';
 import { createStyles, Theme, makeStyles } from '@material-ui/core/styles';
 import MenuIcon from '@material-ui/icons/Menu';
 
+import { LanguageSelect } from '../Locale';
+
 
 const useStyles = (drawerWidth: number) => makeStyles((theme: Theme) =>
   createStyles({
@@ -50,9 +52,9 @@ const LayoutTop: React.FC<LayoutTopProps> = ({drawer, children}) => {
   
   return (
     <AppBar position="fixed" className={clsx(classes.appBar, { [classes.appBarShift]: drawer.open })}>
+
       <div className={classes.root}>    
       <Toolbar>
-      
         <IconButton
           //color="inherit"
           aria-label="open drawer"
@@ -61,9 +63,7 @@ const LayoutTop: React.FC<LayoutTopProps> = ({drawer, children}) => {
           className={clsx(classes.menuButton, drawer.open && classes.hide)}>
           <MenuIcon color="primary"/>
         </IconButton>
-        
         {children}
-        
       </Toolbar>
     </div>
   </AppBar>);

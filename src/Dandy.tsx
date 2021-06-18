@@ -21,17 +21,22 @@ interface DandyProps { //config object, keep everything here
     primary: Theme,
     secondary?: Theme
   },
+  
+  locale: {
+    default: string,
+    options: string[],
+  }
   md: DomainModel.MdFiles
 }
 
 const history: History = createHashHistory();
 
-const Dandy: React.FC<DandyProps> = ({theme, brand, md}) => {
+const Dandy: React.FC<DandyProps> = ({theme, brand, md, locale}) => {
  
   return (
   <Router history={history}>
     <Route path="/:topic?/:subTopic?/:anchor?" render={(props) => (
-      <UIContextProvider md={md} route={props.match.params} history={history}>
+      <UIContextProvider md={md} route={props.match.params} history={history} defaultLocale={locale.default}>
         <UIApp brand={brand} theme={theme} />
       </UIContextProvider>
     )} />

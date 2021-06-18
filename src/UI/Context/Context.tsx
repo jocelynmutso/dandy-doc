@@ -8,6 +8,7 @@ interface UIContextType {//declare what is in the context
   site: DomainModel.Site;
   nav: DomainModel.Location;
 
+  setLocale: (newLocale: string) => void;
   setTopic: (topic: DomainModel.Topic) => void;
   setSubTopic: (subTopic: DomainModel.SubTopic) => void;
   setAnchor: (anyPath: string) => void;
@@ -21,6 +22,7 @@ interface RouteInitProps {
 }
 
 interface UIContextProviderProps {
+  defaultLocale: string,
   route: RouteInitProps,
   history: History;
   md: DomainModel.MdFiles;
@@ -29,14 +31,14 @@ interface UIContextProviderProps {
 
 const UIContextProvider: React.FC<UIContextProviderProps> = (props) => {
   
-  const [site, siteDispatch] = React.useReducer(siteReducer, React.useMemo(() => service.createSite(props.md), [props.md])); 
+  const [site, siteDispatch] = React.useReducer(siteReducer, React.useMemo(() => service.createSite(props.md, props.defaultLocale), [props.md])); 
   
   //link reducer to react hook with initial state
   const nav = React.useMemo(() => service.createNav(site, props.route), [site, props.route]);
 
   //overwrite initial values anyway
   const contextValue: UIContextType = { 
-    site, nav,
+    site, nav, 
     
     setTopic: (topic) => {
       const nav = service.createNav(site, {topic: topic.id});
@@ -48,6 +50,9 @@ const UIContextProvider: React.FC<UIContextProviderProps> = (props) => {
     },
     setAnchor: (anyPath) => {
       props.history.push(service.createRoute(service.findNav(site, nav, anyPath))); 
+    },
+    setLocale: (newLocale: string) => {
+      siteDispatch({type: "setLocale", locale: newLocale })
     }
   };
   
@@ -75,7 +80,8 @@ const UIContext = React.createContext<UIContextType>({
   nav: initNav,
   setTopic: (topic: DomainModel.Topic) => console.log(topic),
   setSubTopic: (subTopic: DomainModel.SubTopic) => console.log(subTopic),
-  setAnchor: (anyPath: string) => console.log(anyPath)
+  setAnchor: (anyPath: string) => console.log(anyPath),
+  setLocale: (newLocale: string) => console.log(newLocale)
 })
 
 export { UIContext, UIContextProvider }

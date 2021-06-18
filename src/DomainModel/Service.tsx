@@ -6,10 +6,14 @@ interface Service {
   findNav(site: DomainModel.Site, oldState: DomainModel.Location, anyPath: string): DomainModel.Location;
   createNav(site:DomainModel.Site, route: {topic?:string, subTopic?: string, anchor?: string}): DomainModel.Location;
   fetch(subTopic: DomainModel.SubTopic): Promise<DomainModel.MdMutator>
-  createSite(files: DomainModel.MdFiles): DomainModel.Site;
+  createSite(files: DomainModel.MdFiles, defaultLocale: string): DomainModel.Site;
 }
 
 const PREFIX_LENGTH = 4;
+
+const parseLocale = (url: string) => {
+  return url.substring(url.length - 5, url.length - 3);
+}
 
 class ServiceImpl implements Service {
 
@@ -24,7 +28,7 @@ class ServiceImpl implements Service {
       console.error(response);
       return `# Can't fetch sub topic:'${url}'`;
     })
-    .then(src => ({url, anchors: [], src}));
+    .then(src => ({url, locale: parseLocale(url), anchors: [], src}));
   }
   
   findNav(site: DomainModel.Site, oldState: DomainModel.Location, anyPath: string): DomainModel.Location {
@@ -97,7 +101,7 @@ class ServiceImpl implements Service {
     return new ImmutableLocation();
   }
   
-  createSite(mdFiles: DomainModel.MdFiles) {
+  createSite(mdFiles: DomainModel.MdFiles, defaultLocale: string) {
     const subs: DomainModel.SubTopic[] = [];
     
     /* 
@@ -164,7 +168,7 @@ class ServiceImpl implements Service {
       const content = file.content;
       const topicSubName = toTitleCase(fileName.substring(fileName.lastIndexOf("/")+ 1));
 
-      const md = new ImmutableMd(url, content ? true : false, content, undefined, file.build);
+      const md = new ImmutableMd(url, parseLocale(url), content ? true : false, content, undefined, file.build);
       const subTopic = new ImmutableSubTopic(subTopicId, topicId, topicSubName, md);
       
       subs.push(subTopic);
@@ -186,7 +190,7 @@ class ServiceImpl implements Service {
     
     const allMainTopics: DomainModel.Topic[] = Object.keys(mains).map(createMainTopic);
     const build = mdFiles.build ? mdFiles.build : Date.now()/1000;
-    const initSite = new ImmutableSite(build, subs, allMainTopics);
+    const initSite = new ImmutableSite(build, subs, allMainTopics, defaultLocale);
     
     console.log("Site created: ", initSite);
     return initSite;

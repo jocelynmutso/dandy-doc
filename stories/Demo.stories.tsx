@@ -40,8 +40,14 @@ const brand = {
   logo: <img src={logo} alt={""} />
 }
 
-export const hello = () => (<>
-  <Dandy theme={DefaultTheme} md={mdFiles} brand={brand}/>
+const locale = {
+  default: "en",
+  options: [],
+}
+
+
+export const appTest = () => (<>
+  <Dandy theme={DefaultTheme} md={mdFiles} brand={brand} locale={locale}/>
 </>);
 
 

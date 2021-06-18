@@ -5,11 +5,13 @@ class ImmutableSite implements DomainModel.Site {
   private _build: number;
   private _subTopics: DomainModel.SubTopic[];
   private _topics: DomainModel.Topic[];
+  private _locale: string;
   
-  constructor(build: number, subTopics: DomainModel.SubTopic[], topics: DomainModel.Topic[]) {
+  constructor(build: number, subTopics: DomainModel.SubTopic[], topics: DomainModel.Topic[], defaultLocale: string) {
     this._subTopics = subTopics;
     this._topics = topics;
     this._build = build;
+    this._locale = defaultLocale;
   }
   get build(): number {
     return this._build;
@@ -19,6 +21,9 @@ class ImmutableSite implements DomainModel.Site {
   }
   get subTopics(): DomainModel.SubTopic[] {
     return this._subTopics;
+  }
+  get locale(): string {
+    return this._locale;
   }
   getTopic(id: string): DomainModel.Topic {
     const result = this.findTopic(id);
@@ -51,6 +56,9 @@ class ImmutableSite implements DomainModel.Site {
     }
     return undefined;
   }
+  withLocale(newLocale: string): DomainModel.Site {
+    return new ImmutableSite(this._build, this._subTopics, this._topics, newLocale);
+  }
   withMd(markdown: DomainModel.MdMutator): DomainModel.Site {
     const newTopics: DomainModel.Topic[] = [];
     const newSubTopics: DomainModel.SubTopic[] = [];
@@ -74,7 +82,7 @@ class ImmutableSite implements DomainModel.Site {
       }
     }
 
-    return new ImmutableSite(this._build, newSubTopics, newTopics);
+    return new ImmutableSite(this._build, newSubTopics, newTopics, this._locale);
     
   }
 }
@@ -144,7 +152,7 @@ class ImmutableSubTopic implements DomainModel.SubTopic {
     return this._md
   }
   withMd(markdown: DomainModel.MdMutator): DomainModel.SubTopic {
-    const md: DomainModel.Md = new ImmutableMd(markdown.url, true, markdown.src, markdown.anchors, this._md.build);
+    const md: DomainModel.Md = new ImmutableMd(markdown.url, markdown.locale, true, markdown.src, markdown.anchors, this._md.build);
     return new ImmutableSubTopic(this._id, this._topicId, this._name, md);
   }
 }
@@ -155,16 +163,21 @@ class ImmutableMd implements DomainModel.Md {
   private _anchors: string[];
   private _src?: string;
   private _build?: DomainModel.MdBuild;
+  private _locale: string;
   
-  constructor(url: string, loaded?: boolean, src?: string, anchors?: string[], build?: DomainModel.MdBuild) {
+  constructor(url: string, locale: string, loaded?: boolean, src?: string, anchors?: string[], build?: DomainModel.MdBuild) {
     this._url = url;
     this._loaded = loaded ? true : false;
     this._anchors = anchors ? anchors : [];
     this._src = src;
     this._build = build;
+    this._locale = locale;
   }
   get url(): string {
     return this._url;
+  }
+  get locale(): string {
+    return this._locale;
   }
   get build(): DomainModel.MdBuild | undefined {
     return this._build;

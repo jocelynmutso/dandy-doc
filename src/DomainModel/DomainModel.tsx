@@ -4,11 +4,13 @@ declare namespace DomainModel {
     build: number, 
     topics: Topic[],
     subTopics: SubTopic[],
+    locale: string;
     getTopic(id: string): Topic;
     findTopic(id: string): Topic | undefined;
     getSubTopic(id: string): SubTopic;
     findSubTopic(id?: string): SubTopic | undefined;
     withMd(newMarkdown: MdMutator) : Site;
+    withLocale(newLocale: string): Site ;
   } 
    
   interface Topic {
@@ -28,6 +30,7 @@ declare namespace DomainModel {
   }
   
   interface Md {
+    locale: string,
     url: string,
     loaded: boolean,
     anchors: string[],
@@ -42,8 +45,9 @@ declare namespace DomainModel {
   
   interface MdMutator {
     url: string,
-    anchors: string[], 
-    src: string
+    anchors: string[],
+    src: string,
+    locale: string;
   }
   
   

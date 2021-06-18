@@ -7,6 +7,9 @@ import IconButton from '@material-ui/core/IconButton';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 
+import { LanguageSelect } from '../Locale';
+
+
 
 const useStyles = (drawerWidth: number) => makeStyles((theme: Theme) =>
   createStyles({
