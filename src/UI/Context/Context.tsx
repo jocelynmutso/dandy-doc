@@ -2,12 +2,14 @@ import React from 'react';
 import { History } from 'history';
 
 import { DomainModel, ImmutableLocation, Service, ServiceImpl } from '../../DomainModel';
-import { siteReducer } from './siteReducer';
+
 
 interface UIContextType {//declare what is in the context
+  sites: DomainModel.Site[];
   site: DomainModel.Site;
   nav: DomainModel.Location;
-
+  locale: string;
+  
   setLocale: (newLocale: string) => void;
   setTopic: (topic: DomainModel.Topic) => void;
   setSubTopic: (subTopic: DomainModel.SubTopic) => void;
@@ -30,15 +32,14 @@ interface UIContextProviderProps {
 }
 
 const UIContextProvider: React.FC<UIContextProviderProps> = (props) => {
-  
-  const [site, siteDispatch] = React.useReducer(siteReducer, React.useMemo(() => service.createSite(props.md, props.defaultLocale), [props.md])); 
-  
-  //link reducer to react hook with initial state
+  const [locale, setLocale] = React.useState<string>(props.defaultLocale);
+  const sites = React.useMemo(() => service.createSite(props.md), [props.md]);
+  const site = sites.filter(s => s.locale === locale)[0];
   const nav = React.useMemo(() => service.createNav(site, props.route), [site, props.route]);
 
   //overwrite initial values anyway
   const contextValue: UIContextType = { 
-    site, nav, 
+    sites, site, nav, locale,
     
     setTopic: (topic) => {
       const nav = service.createNav(site, {topic: topic.id});
@@ -52,20 +53,9 @@ const UIContextProvider: React.FC<UIContextProviderProps> = (props) => {
       props.history.push(service.createRoute(service.findNav(site, nav, anyPath))); 
     },
     setLocale: (newLocale: string) => {
-      siteDispatch({type: "setLocale", locale: newLocale })
+      setLocale(newLocale);
     }
   };
-  
-  
-  React.useEffect(() => {
-    const subTopic = nav.subTopic;
-    if(subTopic && !subTopic.value.md.loaded) {
-      // load
-      service.fetch(subTopic.value)
-      .then(newMarkdown => siteDispatch({type: "setMarkdown", newMarkdown }));
-    }
-    
-  }, [service, nav])
   
   //initialise provider
   return (<UIContext.Provider value={contextValue}>
@@ -76,7 +66,9 @@ const UIContextProvider: React.FC<UIContextProviderProps> = (props) => {
 const service: Service = new ServiceImpl();
 const initNav: DomainModel.Location = new ImmutableLocation();
 const UIContext = React.createContext<UIContextType>({  
-  site: { } as DomainModel.Site,
+  sites: [],
+  site: {} as any,
+  locale: 'en',
   nav: initNav,
   setTopic: (topic: DomainModel.Topic) => console.log(topic),
   setSubTopic: (subTopic: DomainModel.SubTopic) => console.log(subTopic),

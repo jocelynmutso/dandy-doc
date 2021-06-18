@@ -1,5 +1,6 @@
 
 import React from 'react';
+import { IntlProvider } from 'react-intl';
 import { Theme, ThemeProvider } from '@material-ui/core/styles';
 
 import { DomainModel } from '../DomainModel'
@@ -10,7 +11,8 @@ import { MenuLevel1, MenuLevel2 } from './Menu';
 import { MarkdownView } from './Markdown';
 import { UIContext }  from './Context/Context';
 import { BuildInfo } from './BuildInfo';
-
+import { LanguageSelect } from './Locale';
+    
 //create layout here
 //create content for left, top, and center here
 
@@ -22,11 +24,12 @@ interface UIAppProps { //config object, keep everything here
   theme: {
     primary: Theme,
     secondary?: Theme
-  }
+  },
+  messages: Record<string, any>
 }
 
-const UIApp: React.FC<UIAppProps> = ({theme, brand}) => {
-  const { site, nav } = React.useContext(UIContext);
+const UIApp: React.FC<UIAppProps> = ({theme, brand, messages}) => {
+  const { site, nav, locale } = React.useContext(UIContext);
   const [ drawerOpen, setDrawerOpen ] = React.useState<boolean>(true);
   const drawer = { width: 260, open: drawerOpen, setOpen: () => setDrawerOpen(!drawerOpen) };
    
@@ -53,15 +56,17 @@ const UIApp: React.FC<UIAppProps> = ({theme, brand}) => {
   const top = (<LayoutTop drawer={drawer}>
     <Brand logo={brand.logo} title={brand.title} />
     <Search theme={theme}/>
+    <LanguageSelect />
   </LayoutTop>);
   
   const center = nav.subTopic ? (<MarkdownView />) : null;
   
   return (
-    <ThemeProvider theme={theme.primary}>
-      <Layout top={top} left={left} center={center} drawer={drawer} />
-    </ThemeProvider>
-
+    <IntlProvider locale={locale} messages={messages[locale]}>
+      <ThemeProvider theme={theme.primary}>
+        <Layout top={top} left={left} center={center} drawer={drawer} />
+      </ThemeProvider>
+    </IntlProvider >
   );
 }
 

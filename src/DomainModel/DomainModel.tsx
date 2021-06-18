@@ -1,7 +1,7 @@
 declare namespace DomainModel {
-  
+
   interface Site {
-    build: number, 
+    build: number,
     topics: Topic[],
     subTopics: SubTopic[],
     locale: string;
@@ -9,58 +9,46 @@ declare namespace DomainModel {
     findTopic(id: string): Topic | undefined;
     getSubTopic(id: string): SubTopic;
     findSubTopic(id?: string): SubTopic | undefined;
-    withMd(newMarkdown: MdMutator) : Site;
-    withLocale(newLocale: string): Site ;
-  } 
-   
+  }
+
   interface Topic {
     id: string,
     name: string,
     subTopics: SubTopic[],
-    withSubTopic(newSubTopic: SubTopic) : Topic;
   }
-  
+
   interface SubTopic {
     id: string,
     topicId: string;
     subTopicId: string
     name: string,
     md: Md
-    withMd(newMarkdown: MdMutator) : SubTopic;
   }
-  
+
   interface Md {
-    locale: string,
     url: string,
-    loaded: boolean,
     anchors: string[],
     src?: string,
     build?: MdBuild
   }
-  
+
   interface MdBuild {
-    created: number, 
+    created: number,
     modified: number
   }
-  
-  interface MdMutator {
+
+  interface MdFile {
+    name: string,
     url: string,
-    anchors: string[],
-    src: string,
-    locale: string;
+    content: string
+    build?: { created: number, modified: number }
   }
-  
-  
+
   interface MdFiles {
     build?: number,
-    files: {  //markdown files to be displaoyed
-      name: string,
-      url: string,
-      content?: string
-      build?: { created: number, modified: number }
-    }[],
+    files: MdFile[],
   }
-  
+
   interface Location {
     topic?: Topic,
     subTopic?: { value: SubTopic, anchor?: string }

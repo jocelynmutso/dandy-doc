@@ -6,9 +6,6 @@ import IconButton from '@material-ui/core/IconButton';
 import { createStyles, Theme, makeStyles } from '@material-ui/core/styles';
 import MenuIcon from '@material-ui/icons/Menu';
 
-import { LanguageSelect } from '../Locale';
-
-
 const useStyles = (drawerWidth: number) => makeStyles((theme: Theme) =>
   createStyles({
     root: {
@@ -46,27 +43,27 @@ interface LayoutTopProps {
   children: React.ReactNode[];
 }
 
-const LayoutTop: React.FC<LayoutTopProps> = ({drawer, children}) => {
+const LayoutTop: React.FC<LayoutTopProps> = ({ drawer, children }) => {
   const classes = useStyles(drawer.width);
-  
-  
+
+
   return (
     <AppBar position="fixed" className={clsx(classes.appBar, { [classes.appBarShift]: drawer.open })}>
 
-      <div className={classes.root}>    
-      <Toolbar>
-        <IconButton
-          //color="inherit"
-          aria-label="open drawer"
-          onClick={() => drawer.setOpen()}
-          edge="start"
-          className={clsx(classes.menuButton, drawer.open && classes.hide)}>
-          <MenuIcon color="primary"/>
-        </IconButton>
-        {children}
-      </Toolbar>
-    </div>
-  </AppBar>);
+      <div className={classes.root}>
+        <Toolbar>
+          <IconButton
+            aria-label="open drawer"
+            onClick={() => drawer.setOpen()}
+            edge="start"
+            className={clsx(classes.menuButton, drawer.open && classes.hide)}>
+            <MenuIcon color="primary" />
+          </IconButton>
+          {children}
+        </Toolbar>
+
+      </div>
+    </AppBar>);
 }
 
 export default LayoutTop;
@@ -81,4 +78,4 @@ export default LayoutTop;
 
 
 
-  
+

@@ -47,7 +47,11 @@ const locale = {
 
 
 export const appTest = () => (<>
-  <Dandy theme={DefaultTheme} md={mdFiles} brand={brand} locale={locale}/>
+  <Dandy theme={DefaultTheme} md={mdFiles} brand={brand} locale={locale} messages={{
+    "en": {
+      "en": "English"
+    }
+  }}/>
 </>);
 
 

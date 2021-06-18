@@ -2,26 +2,9 @@ import React from 'react';
 import ReactMarkdown from 'react-markdown'
 import gfm from 'remark-gfm';
 
-import LinearProgress from '@material-ui/core/LinearProgress';
-import { Theme, makeStyles, createStyles } from '@material-ui/core/styles';
-import Fade from '@material-ui/core/Fade';
-
-
 import { UIContext }  from '../Context/Context';
-import { DomainModel }  from '../../DomainModel';
 import Renderers from './Renderers';
 
-
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    root: {
-      width: '100%',
-      '& > * + *': {
-        marginTop: theme.spacing(2),
-      },
-    },
-  }),
-);
 
 type AnchorRef = {
   name: string;
@@ -33,7 +16,6 @@ interface MarkdownViewProps {
 
 
 const MarkdownView: React.FC<MarkdownViewProps> = ({}) => {
-  const classes = useStyles();
   const { nav, setAnchor, site } = React.useContext(UIContext);
       
   const anchorRefs: AnchorRef[] = React.useMemo(() => [], []);
@@ -75,23 +57,14 @@ const MarkdownView: React.FC<MarkdownViewProps> = ({}) => {
   }
   
   return (<div>
-    <div className={classes.root}>
-      <Fade in={!subTopic.md.loaded}>
-        <LinearProgress color="secondary" />
-      </Fade>
-    </div>
-  
-    { subTopic.md.loaded ? (<ReactMarkdown 
+    <ReactMarkdown 
         source={subTopic.md.src ? subTopic.md.src : ''}
         plugins={[Renderers.ViewPlugin, gfm]} 
         renderers={{ 
           image: Renderers.Image,
           link: (props) => Renderers.Link(onAnchorClick, props),
           text: (props) => Renderers.Text(createAnchorRef, props) 
-        }}/>) :
-      undefined
-    }
-
+        }}/>
   </div>);
 }
 
