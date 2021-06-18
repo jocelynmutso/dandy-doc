@@ -9,7 +9,7 @@ export default { title: 'Demo stories' };
 
 interface RequireContext {
   keys(): string[];
-  (id: string): { default: string};
+  (id: string): { default: string };
 }
 
 
@@ -21,18 +21,18 @@ const logo = requirePng.keys().map(fileName => {
 const requireModule: RequireContext = require.context("./demo/", true, /\.md$/)
 
 const mdFiles: DomainModel.MdFiles = {
-  build: Date.now()/1000,
+  build: Date.now() / 1000,
   files: requireModule
-  .keys()
-  .map((fileName: string) => {
-    const m = requireModule(fileName);
-    return {
-      url: fileName,
-      content: m.default,
-      name: fileName,
-      build: { created: 1610128748, modified: 1613232060 }
-    };
-  })
+    .keys()
+    .map((fileName: string) => {
+      const m = requireModule(fileName);
+      return {
+        url: fileName,
+        content: m.default,
+        name: fileName,
+        build: { created: 1610128748, modified: 1613232060 }
+      };
+    })
 };
 
 const brand = {
@@ -49,9 +49,18 @@ const locale = {
 export const appTest = () => (<>
   <Dandy theme={DefaultTheme} md={mdFiles} brand={brand} locale={locale} messages={{
     "en": {
-      "en": "English"
+      "en": "English",
+      "fi": "Finnish",
+      "search": "Search",
+      "select": "Select language"
+    },
+    "fi": {
+      "en": "Englanti",
+      "fi": "Suomi",
+      "search": "Etsi",
+      "select": "Valitse kieli"
     }
-  }}/>
+  }} />
 </>);
 
 
